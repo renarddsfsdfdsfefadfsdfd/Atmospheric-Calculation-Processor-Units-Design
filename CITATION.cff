@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this design study or the ACPU Studio software, please cite it as below."
+type: software
+title: "ACPU-1 Tempest: an atmospheric calculation processor unit for ensemble chaotic computation"
+abstract: >-
+  Design study of a domain-specific processor for ensemble numerical weather
+  prediction, atmospheric data assimilation and dispersion: architecture,
+  pre-silicon performance/energy evaluation, 3 nm process integration,
+  packaging, and a cross-platform software stack.
+authors:
+  - family-names: Zhang
+    given-names: Yaolin
+    affiliation: "HKUST (Guangzhou)"
+version: 1.0.0
+date-released: 2026-11-02
+license: MIT
+keywords:
+  - domain-specific accelerator
+  - numerical weather prediction
+  - ensemble data assimilation
+  - chaotic dynamics
+  - energy efficiency
+  - edge AI

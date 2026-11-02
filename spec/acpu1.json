@@ -1,0 +1,236 @@
+{
+  "chip": {
+    "name": "ACPU-1",
+    "codename": "Tempest",
+    "full_name": "Atmospheric Calculation Processor Unit",
+    "class": "domain-specific atmospheric chaos accelerator",
+    "revision": "1.0",
+    "date": "2026-11-02",
+    "positioning": "PCIe/CXL add-in card for ensemble numerical weather prediction, data assimilation, atmospheric dispersion and chemical transport",
+    "not_a_gpu": true
+  },
+  "process": {
+    "node_name": "N3G (3 nm-class gate-all-around)",
+    "device": "nanosheet GAA-FET",
+    "sheet_width_nm": 16,
+    "sheet_thickness_nm": 5,
+    "sheets_per_stack_n": 3,
+    "cpp_nm": 45,
+    "mmp_nm": 24,
+    "cell_height_tracks": 6,
+    "metal_layers_front": 12,
+    "metal_pitch_top_nm": 56,
+    "metal_layers_back": 3,
+    "bspdn": true,
+    "ntsv_pitch_um": 0.4,
+    "euv_layers": 18,
+    "duv_layers": 61,
+    "total_masks": 79,
+    "wafer_mm": 300,
+    "vdd_nominal_v": 0.75,
+    "vdd_ntv_v": 0.55,
+    "vdd_boost_v": 0.85,
+    "vth_options_mv": [
+      -40,
+      0,
+      40,
+      80
+    ]
+  },
+  "die": {
+    "compute_mm2": 287.6,
+    "compute_width_mm": 18.2,
+    "compute_height_mm": 15.8,
+    "transistors_g": 28.4,
+    "l3_dies": 2,
+    "l3_die_mb": 64,
+    "l3_die_node": "N6",
+    "l3_die_mm2": 42.0,
+    "l3_bond": "hybrid bonding, 6 um pitch",
+    "area_budget_mm2": {
+      "avt_array": 121.6,
+      "cluster_shared": 33.6,
+      "chaos_engines": 7.2,
+      "da_engines": 6.4,
+      "stochastic_physics": 2.4,
+      "conservation_monitor": 1.8,
+      "l3_interface": 18.0,
+      "hbm_phy": 24.0,
+      "pcie_cxl": 8.5,
+      "noc": 32.0,
+      "clock_pll_thermal_dft": 12.0,
+      "misc_margin": 20.1
+    }
+  },
+  "clock": {
+    "nominal_ghz": 1.8,
+    "boost_ghz": 2.1,
+    "ntv_ghz": 1.05,
+    "sram_ghz": 1.8,
+    "noc_ghz": 1.6,
+    "domains": 9
+  },
+  "compute": {
+    "clusters": 8,
+    "tiles_per_cluster": 8,
+    "tiles_total": 64,
+    "lanes_per_tile": 256,
+    "tile_array": [
+      16,
+      16
+    ],
+    "fma_per_lane_per_cycle": {
+      "fp32": 1,
+      "fp16": 2,
+      "fp8": 4
+    },
+    "sfu_per_lane": 0.25,
+    "fma_total": 16384,
+    "peak_tflops_fp32": 58.98,
+    "peak_tflops_fp16": 117.96,
+    "peak_tops_fp8": 235.93,
+    "tile_register_file_kb": 32,
+    "tile_sram_kb": 256,
+    "tile_sram_bw_gbps": 550.0,
+    "halo_ports": 6,
+    "halo_port_bytes_per_cycle": 32,
+    "halo_bw_gbps_per_tile": 345.6,
+    "noc_peak_tbps": 16.0,
+    "time_levels": 3
+  },
+  "memory": {
+    "l2_total_mb": 24,
+    "l2_per_cluster_mb": 3,
+    "l2_bw_tbps": 9.6,
+    "l3_total_mb": 128,
+    "l3_bw_tbps": 8.0,
+    "hbm_type": "HBM3E",
+    "hbm_stacks": 2,
+    "hbm_gb_per_stack": 24,
+    "hbm_gb_total": 48,
+    "hbm_tbps_per_stack": 1.2,
+    "hbm_tbps_total": 2.4,
+    "pcie": "PCIe 6.0 x16 (CXL 3.0 capable)",
+    "pcie_gbps": 121,
+    "pcie_effective_gbps": 100,
+    "ecc": "SEC-DED on SRAM/L2/L3, on-die ECC + link CRC on HBM"
+  },
+  "power": {
+    "tdp_w": 65,
+    "idle_w": 6,
+    "peak_w": 78,
+    "ntv_tdp_w": 34,
+    "budget_w": {
+      "mac_arrays": 18.0,
+      "sram_l2": 7.0,
+      "l3": 5.0,
+      "noc": 4.5,
+      "hbm_phy": 8.0,
+      "pcie_io": 3.0,
+      "clock_pll": 2.5,
+      "leakage": 4.0,
+      "misc": 3.0
+    },
+    "energy_pj": {
+      "fp32_fma": 0.42,
+      "fp16_fma": 0.24,
+      "fp8_mac": 0.14,
+      "int32_add": 0.06,
+      "sfu_op": 1.1,
+      "sram_word_read": 0.3,
+      "sram_word_write": 0.36,
+      "l2_word_read": 0.55,
+      "l3_byte": 0.4,
+      "hbm_byte": 16.0,
+      "noc_byte": 0.12,
+      "dram_refresh_w": 1.2
+    },
+    "cooling": "dual-slot vapour chamber, 2x 92 mm fans, 0.9 kg heatsink"
+  },
+  "thermal": {
+    "t_j_max_c": 95,
+    "t_case_c": 62,
+    "t_ambient_c": 35,
+    "theta_jc_c_per_w": 0.18,
+    "theta_heatsink_c_per_w": 0.28,
+    "theta_ambient_c_per_w": 0.19,
+    "c_j_j_per_k": 1.9,
+    "c_heatsink_j_per_k": 62.0,
+    "c_board_j_per_k": 180.0,
+    "leakage_temp_coeff_per_k": 0.012
+  },
+  "logical": {
+    "avisa_version": "AVISA 1.0",
+    "instruction_width_bits": 64,
+    "vliw_slots": 4,
+    "stencil_units": 4,
+    "max_live_members": 256,
+    "precision_modes": [
+      "fp32",
+      "fp16",
+      "fp8",
+      "mixed_adaptive"
+    ],
+    "rng": "Philox-4x32-10, counter-based, reproducible",
+    "determinism": "static schedule, fixed reduction tree, no atomics in the numerical path"
+  },
+  "package": {
+    "type": "2.5D silicon-bridge interposer, organic substrate",
+    "interposer_reticles": 2.0,
+    "package_mm": [
+      55,
+      45
+    ],
+    "balls": 2812,
+    "ball_pitch_mm": 0.8,
+    "card": "PCIe 6.0 x16, dual-slot, 267 mm, 65 W (slot-powered, no aux connector)",
+    "hbm_stacks": 2,
+    "l3_dies": 2,
+    "assembly": "CoWoS-L class, hybrid bonding for L3, mass reflow for HBM"
+  },
+  "yield_cost": {
+    "defect_density_per_cm2": 0.09,
+    "murphy_model": true,
+    "wafer_cost_usd": 24000,
+    "gross_dies_per_wafer": 202,
+    "l3_die_cost_usd": 12,
+    "hbm_stack_cost_usd": 42,
+    "interposer_cost_usd": 55,
+    "assembly_test_cost_usd": 88,
+    "board_cost_usd": 65,
+    "asp_usd": 1499
+  },
+  "benchmarks": {
+    "reference_forecast": {
+      "name": "W1 operational ensemble forecast",
+      "grid": [
+        1024,
+        1024,
+        64
+      ],
+      "cells": 67108864,
+      "prognostic_vars": 12,
+      "ensemble_members": 64,
+      "dynamics_dt_s": 30,
+      "forecast_h": 24,
+      "physics_calls_per_step": 1,
+      "steps": 2880
+    },
+    "gpu_baseline": {
+      "primary": "NVIDIA H100 SXM5 80GB",
+      "fp32_tflops": 67.0,
+      "fp16_tflops": 989.4,
+      "hbm_tbps": 3.35,
+      "tdp_w": 700,
+      "idle_w": 90,
+      "l2_mb": 50,
+      "stencil_efficiency": 0.3,
+      "da_efficiency": 0.55,
+      "secondary": "NVIDIA A100 SXM 80GB",
+      "a100_fp32_tflops": 19.5,
+      "a100_fp16_tflops": 312.0,
+      "a100_hbm_tbps": 2.039,
+      "a100_tdp_w": 400
+    }
+  }
+}
