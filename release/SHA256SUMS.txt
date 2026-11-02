@@ -1,0 +1,8 @@
+e98bfec1aff2d57dc9dee0b104c6e85a7f03cdab81dfca2d1681ee3606180026  ACPU Studio-1.0.0-arm64-setup.exe
+387a95d45819c903abf08e13922b919d6265ab62b9b30f4929e6716168e14ea6  ACPU Studio-1.0.0-portable.exe
+412ef7ece20063996cc9d6dec813e8d72f2e2e19a6fb72af7748f1f95a0297f4  ACPU Studio-1.0.0-setup.exe
+ced5184bd3aafd443a2717f112f7338b9b9b72668ba05b6949ca240f8091440e  ACPU Studio-1.0.0-universal-mac.zip
+ee21046817530bcdd60476fd70ad492aa78790628f909d00872f0f7652b5aab0  ACPU Studio-1.0.0-x64-setup.exe
+ddea14dfc74bd9efb9e6a4444dfe164d07e0c593dbabb241b77bc6f35c812daf  ACPU Studio-1.0.0.AppImage
+6326998b53c2ee0c372318485f03dd5104bd3703f21399fe9a3faf59222fbbd1  ACPU-Studio-1.0.0-universal.dmg
+5beb2010ffd964fb91b9b35468668e0e29f250e97283a9d565d2ab4c580a17e8  acpu-studio-1.0.0.tar.gz
