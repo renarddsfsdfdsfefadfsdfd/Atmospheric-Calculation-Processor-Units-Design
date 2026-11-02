@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.9in}</style></head>
+<body data-meta='{"width":6.6,"height":3.9}'>
+<div class="fig" style="grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Software stack</div>
+ <div class="col" style="gap:1.5pt">
+  <div class="box navy" style="font-size:5.2pt;padding:2.5pt"><b>ACPU Studio</b> &middot; desktop UI, 3 platforms
+    <span class="sub">formula console, device view, run history</span></div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2.5pt"><b>SDK</b> &middot; Python / Node / HTTP
+    <span class="sub">one-line calls: forecast(), assimilate(), lyapunov()</span></div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box" style="font-size:5.2pt;padding:2.5pt"><b>ACPU driver + runtime</b>
+    <span class="sub">queue, DMA, telemetry, ECC counters, 9771/tcp</span></div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box amber" style="font-size:5.2pt;padding:2.5pt"><b>ACPU-1 device</b>
+    <span class="sub">64 AVTs, 128 MB L3, 48 GB HBM3E</span></div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Compilation flow</div>
+ <div class="row" style="gap:3pt;align-items:stretch">
+  <div class="box grey" style="flex:1;font-size:5.4pt">atmosphere DSL<br>stencils + ensembles</div>
+  <div class="arrow h">&#9654;</div>
+  <div class="box teal" style="flex:1;font-size:5.4pt">ACPU-IR<br>dataflow graph</div>
+  <div class="arrow h">&#9654;</div>
+  <div class="box" style="flex:1;font-size:5.4pt">tile mapper<br>3D blocks + halos</div>
+</div>
+ <div class="row" style="gap:3pt;align-items:stretch;margin-top:4pt">
+  <div class="box" style="flex:1;font-size:5.4pt">precision planner<br>per-cell classes</div>
+  <div class="arrow h">&#9654;</div>
+  <div class="box amber" style="flex:1;font-size:5.4pt">static scheduler<br>61,900 cycles</div>
+  <div class="arrow h">&#9654;</div>
+  <div class="box navy" style="flex:1;font-size:5.4pt">AVISA binary<br>+ halo script</div>
+</div>
+ <div class="sub" style="margin-top:5pt">No dynamic scheduling: the cycle count of every tile is known
+   before the run starts, which is what makes the 71% utilisation reproducible and auditable.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>One-line calls</div>
+ <div class="mono" style="font-size:6pt;line-height:1.55;background:#F8FAFC;border:0.5pt solid #E2E8F0;border-radius:2pt;padding:5pt">
+<span class="k">import</span> acpu<br>
+dev = acpu.ACPUDevice()<br><br>
+r = dev.<span class="k">forecast</span>(<br>
+&nbsp;&nbsp;model=<span style="color:#B4453C">"l96"</span>, members=64,<br>
+&nbsp;&nbsp;lead_days=10, precision=<span style="color:#B4453C">"adaptive"</span>)<br><br>
+<span class="k">print</span>(r.rmse, r.energy_j, r.seconds)
+ </div>
+ <div class="sub" style="margin-top:4pt">The same call exists in JavaScript, on the CLI and over HTTP;
+   the console in the app parses <span class="mono">forecast(members=64, lead_days=10)</span>.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">d</span>Driver interface</div>
+ <table class="t">
+  <tr><th>call</th><th>meaning</th></tr>
+  <tr><td class="mono">ACPI_DEV_INFO</td><td>64 tiles, clocks, temperature</td></tr>
+  <tr><td class="mono">ACPI_LOAD</td><td>AVISA binary + constants</td></tr>
+  <tr><td class="mono">ACPI_RUN</td><td>start a job, returns job id</td></tr>
+  <tr><td class="mono">ACPI_POLL</td><td>progress, energy, Tj</td></tr>
+  <tr><td class="mono">ACPI_READ</td><td>DMA result buffers</td></tr>
+  <tr><td class="mono">ACPI_ECC</td><td>corrected / uncorrected counts</td></tr>
+ </table>
+ <div class="sub">The virtual device in the app implements the same seven calls, so code written
+   against it runs unchanged on silicon.</div>
+</div>
+
+</div></body></html>

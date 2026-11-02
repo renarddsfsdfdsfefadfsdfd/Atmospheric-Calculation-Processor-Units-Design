@@ -1,0 +1,111 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:5.2in}</style></head>
+<body data-meta='{"width":6.6,"height":5.2}'>
+<div class="fig" style="grid-template-columns:1.25fr 1fr;grid-template-rows:1.35fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Die floorplan (18.2 &times; 15.8 mm)</div>
+ <div style="position:relative;width:100%;height:90%;background:#FBFCFE;border:0.7pt solid #10233F">
+  <!-- 8 clusters, 14.2 mm2 each -->
+  <div style="position:absolute;left:2%;top:8%;width:44%;height:40%;display:grid;grid-template-columns:1fr 1fr;gap:2pt">
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 0<br><span class="sub">14.2 mm&sup2;</span></div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 1</div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 2</div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 3</div>
+  </div>
+  <div style="position:absolute;left:50%;top:8%;width:44%;height:40%;display:grid;grid-template-columns:1fr 1fr;gap:2pt">
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 4</div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 5</div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 6</div>
+    <div class="box teal" style="font-size:5.4pt;padding:2pt">EC 7</div>
+  </div>
+  <div style="position:absolute;left:2%;top:50%;width:92%;height:14%;display:grid;
+    grid-template-columns:2.2fr 1fr 1fr;gap:2pt">
+    <div class="box navy" style="font-size:5.4pt;padding:2pt">L3 / NoC fabric &middot; 32 mm&sup2;</div>
+    <div class="box" style="font-size:5.4pt;padding:2pt">chaos + DA engines<br>15.4 mm&sup2;</div>
+    <div class="box" style="font-size:5.4pt;padding:2pt">HBM PHY 0<br>12 mm&sup2;</div>
+  </div>
+  <div style="position:absolute;left:2%;top:66%;width:92%;height:9%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2pt">
+    <div class="box" style="font-size:5.2pt;padding:1.5pt">HBM PHY 1</div>
+    <div class="box" style="font-size:5.2pt;padding:1.5pt">PCIe / CXL 8.5 mm&sup2;</div>
+    <div class="box" style="font-size:5.2pt;padding:1.5pt">clock / thermal / DFT</div>
+  </div>
+  <div style="position:absolute;left:2%;top:79%;width:92%;height:10%;border:0.5pt dashed #94A3B8;
+    border-radius:2pt;font-size:5.3pt;text-align:center;line-height:1.2;color:#475569">
+    margin + routing channels &middot; 20.1 mm&sup2;</div>
+  <div style="position:absolute;left:2%;top:92%;width:92%;height:6%;border-top:0.6pt solid #94A3B8;
+    font-size:5.2pt;color:#6B7A8C;text-align:center">15.8 mm</div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Area budget (287.6 mm&sup2;)</div>
+ <table class="t">
+  <tr><td>AVT array (64 tiles)</td><td class="num" style="text-align:right">121.6</td><td class="lbl">42.3%</td></tr>
+  <tr><td>cluster shared (L2 + ctrl)</td><td class="num" style="text-align:right">33.6</td><td class="lbl">11.7%</td></tr>
+  <tr><td>NoC</td><td class="num" style="text-align:right">32.0</td><td class="lbl">11.1%</td></tr>
+  <tr><td>HBM PHY</td><td class="num" style="text-align:right">24.0</td><td class="lbl">8.3%</td></tr>
+  <tr><td>L3 interface</td><td class="num" style="text-align:right">18.0</td><td class="lbl">6.3%</td></tr>
+  <tr><td>chaos + DA engines</td><td class="num" style="text-align:right">13.6</td><td class="lbl">4.7%</td></tr>
+  <tr><td>clock / PLL / thermal / DFT</td><td class="num" style="text-align:right">12.0</td><td class="lbl">4.2%</td></tr>
+  <tr><td>PCIe / CXL</td><td class="num" style="text-align:right">8.5</td><td class="lbl">3.0%</td></tr>
+  <tr><td>stochastic physics + audit</td><td class="num" style="text-align:right">4.2</td><td class="lbl">1.5%</td></tr>
+  <tr><td>margin + channels</td><td class="num" style="text-align:right">20.1</td><td class="lbl">7.0%</td></tr>
+ </table>
+ <div class="sub">64 AVTs are 42% of the die; data movement (NoC + PHY + L3 interface) is 25%.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Power density across the 64 tiles</div>
+ <div class="grid8" style="height:70%;grid-template-rows:repeat(8,1fr)">
+  <div class="tile" style="background:#F4C9B8"></div><div class="tile" style="background:#EFB9A3"></div>
+  <div class="tile" style="background:#E8A88D"></div><div class="tile" style="background:#E19B7C"></div>
+  <div class="tile" style="background:#DA8E6B"></div><div class="tile" style="background:#D2825C"></div>
+  <div class="tile" style="background:#CB764D"></div><div class="tile" style="background:#C46A3E"></div>
+  <div class="tile" style="background:#F1C2AE"></div><div class="tile" style="background:#ECB399"></div>
+  <div class="tile" style="background:#E5A283"></div><div class="tile" style="background:#DE956D"></div>
+  <div class="tile" style="background:#D7885C"></div><div class="tile" style="background:#CF7C4D"></div>
+  <div class="tile" style="background:#C8703E"></div><div class="tile" style="background:#C1642F"></div>
+  <div class="tile" style="background:#F4C9B8"></div><div class="tile" style="background:#EFB9A3"></div>
+  <div class="tile" style="background:#E8A88D"></div><div class="tile" style="background:#E19B7C"></div>
+  <div class="tile" style="background:#DA8E6B"></div><div class="tile" style="background:#D2825C"></div>
+  <div class="tile" style="background:#CB764D"></div><div class="tile" style="background:#C46A3E"></div>
+  <div class="tile" style="background:#F1C2AE"></div><div class="tile" style="background:#ECB399"></div>
+  <div class="tile" style="background:#E5A283"></div><div class="tile" style="background:#DE956D"></div>
+  <div class="tile" style="background:#D7885C"></div><div class="tile" style="background:#CF7C4D"></div>
+  <div class="tile" style="background:#C8703E"></div><div class="tile" style="background:#C1642F"></div>
+  <div class="tile" style="background:#F7D3C4"></div><div class="tile" style="background:#F2C2AE"></div>
+  <div class="tile" style="background:#EBAE94"></div><div class="tile" style="background:#E4A183"></div>
+  <div class="tile" style="background:#DD9472"></div><div class="tile" style="background:#D58862"></div>
+  <div class="tile" style="background:#CE7C52"></div><div class="tile" style="background:#C77042"></div>
+  <div class="tile" style="background:#F4C9B8"></div><div class="tile" style="background:#EFB9A3"></div>
+  <div class="tile" style="background:#E8A88D"></div><div class="tile" style="background:#E19B7C"></div>
+  <div class="tile" style="background:#DA8E6B"></div><div class="tile" style="background:#D2825C"></div>
+  <div class="tile" style="background:#CB764D"></div><div class="tile" style="background:#C46A3E"></div>
+  <div class="tile" style="background:#F7D3C4"></div><div class="tile" style="background:#F2C2AE"></div>
+  <div class="tile" style="background:#EBAE94"></div><div class="tile" style="background:#E4A183"></div>
+  <div class="tile" style="background:#DD9472"></div><div class="tile" style="background:#D58862"></div>
+  <div class="tile" style="background:#CE7C52"></div><div class="tile" style="background:#C77042"></div>
+  <div class="tile" style="background:#F4C9B8"></div><div class="tile" style="background:#EFB9A3"></div>
+  <div class="tile" style="background:#E8A88D"></div><div class="tile" style="background:#E19B7C"></div>
+  <div class="tile" style="background:#DA8E6B"></div><div class="tile" style="background:#D2825C"></div>
+  <div class="tile" style="background:#CB764D"></div><div class="tile" style="background:#C46A3E"></div>
+ </div>
+ <div class="legend" style="margin-top:2pt;justify-content:space-between"><span>0.42 W/mm&sup2;</span>
+   <span style="width:55%;height:5pt;background:linear-gradient(90deg,#F7D3C4,#C1642F);border-radius:2pt"></span>
+   <span>0.71 W/mm&sup2;</span></div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">d</span>Ensemble cluster (3.9 &times; 3.2 mm)</div>
+ <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;height:62%">
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>0</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>1</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>2</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>3</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>4</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>5</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>6</div>
+  <div class="box teal" style="font-size:5.2pt;padding:2pt">AVT<br>7</div>
+ </div>
+ <div class="box navy" style="font-size:5.4pt;margin-top:3pt">L2 3 MB &middot; scheduler &middot; DVFS &middot; ECC</div>
+ <div class="sub">2.4 TFLOPS fp32 per cluster &middot; 1.8 GHz &middot; 7.1 W at full tilt.</div>
+</div>
+
+</div></body></html>

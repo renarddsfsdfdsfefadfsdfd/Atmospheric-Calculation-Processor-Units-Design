@@ -1,0 +1,177 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[margin=23mm,top=26mm,bottom=24mm,headsep=6mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{amsmath}
+\usepackage[font=small,labelfont={bf,sf},textfont=small,skip=4pt]{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage[hidelinks]{hyperref}
+\usepackage{lastpage}
+\usepackage{multicol}
+\usepackage{placeins}
+
+\definecolor{navy}{RGB}{16,35,63}
+\definecolor{teal}{RGB}{14,124,134}
+\definecolor{amber}{RGB}{217,130,43}
+\definecolor{redac}{RGB}{180,69,60}
+\definecolor{grey}{RGB}{107,122,140}
+\definecolor{lightgrey}{RGB}{226,232,240}
+
+\graphicspath{{../figs/out/}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.2pt plus 1pt}
+\raggedbottom
+
+\titleformat{\section}{\sffamily\Large\bfseries\color{navy}}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{navy}}{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries\color{teal}}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\ac}[1]{\textsf{\textbf{ACPU-#1}}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\sffamily\footnotesize\color{grey}ACPU-1 Technical Report}
+\fancyhead[R]{\sffamily\footnotesize\color{grey}Rev 1.0 \textperiodcentered\ November 2026}
+\fancyfoot[L]{\sffamily\footnotesize\color{grey}Atmospheric Calculation Processor Unit}
+\fancyfoot[R]{\sffamily\footnotesize\color{grey}\thepage\ / \pageref{LastPage}}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{lightgrey}\leaders\hrule height \headrulewidth\hfill}}
+
+\captionsetup[table]{labelfont={bf,sf},textfont=small}
+
+\input{../results/numbers.tex}
+
+\begin{document}
+
+% ------------------------------------------------------------------ title
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{6mm}
+{\sffamily\small\color{teal}\textbf{DESIGN STUDY \textperiodcentered\ PRE-SILICON}}\\[2mm]
+{\color{navy}\rule{\linewidth}{2.2pt}}\\[6mm]
+{\sffamily\fontsize{34}{38}\selectfont\bfseries\color{navy}ACPU-1 ``Tempest''}\\[3mm]
+{\sffamily\fontsize{17}{21}\selectfont\color{navy}An Atmospheric Calculation Processor Unit\\[1mm]
+for Ensemble Chaotic Computation}\\[6mm]
+{\sffamily\large\color{grey}Architecture, pre-silicon evaluation, silicon process,\\
+and a cross-platform software stack}\\[10mm]
+
+{\sffamily\small
+\begin{tabularx}{\linewidth}{@{}lXlX@{}}
+\textbf{Document} & ACPU-TR-001 & \textbf{Revision} & 1.0\\
+\textbf{Date} & 2 November 2026 & \textbf{Author} & Yaolin Zhang\\
+\textbf{Affiliation} & HKUST (Guangzhou) & \textbf{Status} & released for review\\
+\end{tabularx}}
+
+\vspace{5mm}
+{\sffamily\footnotesize\color{grey}\itshape
+This report describes a processor that does not yet exist in silicon. All performance,
+energy, thermal, yield and cost figures are produced by the calibrated pre-silicon model of
+Section~\ref{sec:results}; they are engineering projections with explicit assumptions, not
+measurements. The distinction is maintained throughout and quantified in the sensitivity study.}
+
+\vspace{4mm}
+{\color{navy}\rule{\linewidth}{0.6pt}}\\[3mm]
+{\sffamily\small\color{grey}
+\textbf{Keywords:} domain-specific accelerator \textperiodcentered\ numerical weather prediction
+\textperiodcentered\ ensemble data assimilation \textperiodcentered\ chaotic dynamics
+\textperiodcentered\ energy efficiency \textperiodcentered\ gate-all-around \textperiodcentered\
+backside power delivery \textperiodcentered\ heterogeneous integration}
+\vfill
+{\color{navy}\rule{\linewidth}{0.4pt}}\\[3mm]
+{\sffamily\small
+\begin{tabularx}{\linewidth}{@{}XXXX@{}}
+{\color{navy}\bfseries\fontsize{22}{24}\selectfont 59} &
+{\color{navy}\bfseries\fontsize{22}{24}\selectfont 65 W} &
+{\color{navy}\bfseries\fontsize{22}{24}\selectfont 9.3$\times$} &
+{\color{navy}\bfseries\fontsize{22}{24}\selectfont 287.6}\\
+{\color{grey}fp32 TFLOPS sustained} & {\color{grey}TDP, air cooled} &
+{\color{grey}lower energy per day} & {\color{grey}mm$^2$ compute die}\\
+\end{tabularx}}
+\end{titlepage}
+\setcounter{page}{2}
+
+% ------------------------------------------------------------------ abstract
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+This report specifies \ac{1}, a domain-specific processor for atmospheric chaotic computation.
+The device is an ensemble-native accelerator: 64 Atmospheric Vector Tiles hold 16,384 lanes that
+carry ensemble members rather than matrix rows, a six-neighbour halo fabric exchanges stencil
+boundaries in registers instead of through a cache hierarchy, and a per-cell precision governor
+exploits the fact that forecast error in high-spread regions is dominated by chaotic uncertainty
+rather than by round-off.
+
+On a reference 24-hour, 64-member, 3 km ensemble forecast (5.26 PFLOP, 25.8 GB of state), the
+model projects a sustained 41.9 TFLOPS at 71.1\% of the fp32 peak, a wall-clock time of
+\ACForecastMin\ minutes, and \ACForecastKJ\ kJ at \ACForecastW\ W. A single NVIDIA H100 running
+the same kernels is projected to take \ACGpuMin\ minutes and \ACGpuKJ\ kJ at \ACGpuW\ W, giving a
+\ACRatioForecast$\times$ lower energy per forecast and a \ACRatioDay$\times$ lower energy per
+forecast-and-analysis day. The 90\% interval from a 300-sample Monte-Carlo study is
+\ACRatioDayLo--\ACRatioDayHi$\times$, and the advantage survives at \ACRatioIdeal$\times$ even if
+the GPU is granted 100\% of its fp32 peak.
+
+The advantage is not arithmetic magic. Section~\ref{sec:energy} decomposes it: 56\% of ACPU-1's
+energy is HBM traffic, 26\% is arithmetic and 15\% is static. The GPU loses because its
+general-purpose issue, register-file traffic and kernel re-fetch make a stencil FLOP cost roughly
+an order of magnitude more energy, not because the ASIC multiplies faster. The design therefore
+optimises bytes and reuse first, precision second, and FLOPs third.
+
+The report covers architecture and microarchitecture, the cycle-level pre-silicon methodology and
+its calibration, a numerical validation with cycled ensemble experiments, a 3 nm gate-all-around
+process and backside-power integration flow, packaging, yield, cost, reliability, and a complete
+cross-platform software stack (ACPU Studio, SDKs and a driver ABI). It closes with a deployment
+analysis, an explicit list of limitations, and a three-generation roadmap.
+
+\vspace{4mm}
+{\sffamily\small\color{grey}\textbf{Headline numbers} (model projections, not silicon)}
+\begin{center}\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Sustained throughput (fp32) & \ACSustainedTF & TFLOPS at \ACUtilFP\% of peak\\
+Forecast wall-clock, 64 members, 24 h & \ACForecastMin & min (\ACForecastKJ kJ)\\
+Energy per forecast vs H100 & \ACRatioForecast$\times$ & lower\\
+Energy per forecast + 4 analyses vs H100 & \ACRatioDay$\times$ & lower (90\% CI \ACRatioDayLo--\ACRatioDayHi)\\
+Dense analysis energy vs H100 & \ACRatioDa$\times$ & lower (H100 is 7$\times$ faster)\\
+Analysis RMSE, fp32 vs fp16 & \ACAnalRMSE & vs \ACRMSEfpSixteen\\
+Die yield / package BOM & \ACYieldDie\% & \$ \ACPackageCost\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+\input{sec01_intro}
+\input{sec02_workload}
+\input{sec03_architecture}
+\input{sec04_micro}
+\input{sec05_precision}
+\input{sec06_results}
+\input{sec07_validation}
+\input{sec08_process}
+\input{sec09_manufacturing}
+\input{sec10_software}
+\input{sec11_deployment}
+\input{sec12_roadmap}
+\input{appendix}
+\input{refs}
+
+\end{document}

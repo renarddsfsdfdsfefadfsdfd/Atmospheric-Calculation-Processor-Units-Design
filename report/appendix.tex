@@ -1,0 +1,94 @@
+\FloatBarrier
+\appendix
+\section{Instruction encoding and register map}\label{app:isa}
+
+\begin{table}[h]
+\centering\small
+\caption{AVISA field encoding.}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Field & Bits & Position & Meaning\\
+\midrule
+opcode & 8 & 63--56 & operation (Table~\ref{tab:isa})\\
+precision & 3 & 55--53 & 0 fp32, 1 fp16, 2 bf16, 3 fp8, 4 adaptive\\
+vector mask & 3 & 52--50 & lane-group predicate (8 groups of 32 lanes)\\
+rd & 5 & 49--45 & destination tile register\\
+rs1 & 5 & 44--40 & first source tile register\\
+rs2 & 5 & 39--35 & second source tile register\\
+descriptor & 24 & 34--11 & stencil coefficients, halo offset, stride\\
+member base & 8 & 10--3 & first ensemble member in the lane group\\
+flags & 3 & 2--0 & Kahan, saturate, audit\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The tile register file has 32 registers of 256 lanes $\times$ 32 bits. The descriptor is interpreted
+per opcode: for \code{STENCIL3D} it packs three 6-bit coefficients and a 6-bit halo mask; for
+\code{DA.GAIN} it selects a localisation radius and a symmetry flag. There is no general addressing
+mode; all memory references are offsets into the tile's 256 KB SRAM.
+
+\section{Model parameters}\label{app:params}
+
+\begin{table}[h]
+\centering\small
+\caption{Parameters of the pre-silicon model. The ``range'' column is the interval sampled in the
+Monte-Carlo study.}
+\begin{tabular}{@{}lrll@{}}
+\toprule
+Parameter & Value & Range & Source\\
+\midrule
+fp32 FMA energy & 0.42 pJ & $\pm$25\% & Horowitz 2014, scaled to 3 nm / 0.75 V\\
+fp16 FMA energy & 0.24 pJ & $\pm$25\% & same, half-rate\\
+fp8 MAC energy & 0.14 pJ & $\pm$25\% & same\\
+SRAM read / write & 0.30 / 0.36 pJ per word & $\pm$25\% & published 3 nm SRAM\\
+L3 (stacked) & 0.40 pJ/B & $\pm$25\% & hybrid-bonded SRAM estimate\\
+HBM3E & 16.0 pJ/B & 9--24 & HBM3E datasheet, published PHY energy\\
+Clock and PLL & 2.5 W & & design budget\\
+Leakage & 4.0 W at 0.75 V, 85 $^\circ$C & & library estimate\\
+GPU stencil efficiency & 0.30 & 0.15--0.60 & WRF / COSMO GPU studies\\
+GPU power at load & 263 W on W1 & $\pm$30\% & H100 data sheet, load model\\
+H100 peak fp32 / HBM & 67 TFLOPS / 3.35 TB/s & & data sheet\\
+A100 peak fp32 / HBM & 19.5 TFLOPS / 2.04 TB/s & & data sheet\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproducibility}\label{app:repro}
+
+The complete results of this report are regenerated from the project root by the
+following commands:
+\begin{verbatim}
+python3 sim/run_all.py            # 37 s -> results/*.json, *.csv, numbers.tex
+Rscript figs/src/f01.R            # figure 01
+Rscript figs/src/figs_data1.R     # data figures 12-17
+Rscript figs/src/figs_data2.R     # data figures 08, 10, 21, 22, 25, 26
+bash scripts/build-figures.sh     # schematic figures 02-07, 09, 11, 18-20, 23, 24
+bash scripts/build-report.sh      # -> ACPU-1_Technical_Report.pdf
+\end{verbatim}
+The numerical experiments use fixed seeds, the PRNG is a PCG64 generator, and the model has no
+randomness outside the Monte-Carlo study (which uses seed 42). The report is compiled with Tectonic (XeTeX) by \code{scripts/build-report.sh}. Figures are vector PDFs generated either by R (data) or by
+Chromium (schematics); the UI figure is a set of screenshots of the running application.
+
+\clearpage
+\section{Acronyms}\label{app:acronyms}
+
+\begin{multicols}{2}\small
+\begin{itemize}[leftmargin=0pt,itemsep=0pt]
+\item ACPU --- Atmospheric Calculation Processor Unit
+\item AVT --- Atmospheric Vector Tile
+\item AVISA --- ACPU Vector Instruction Set Architecture
+\item BSPDN --- Backside Power Delivery Network
+\item DA --- Data Assimilation
+\item DVFS --- Dynamic Voltage and Frequency Scaling
+\item EnKF --- Ensemble Kalman Filter
+\item FIT --- Failures In Time (per $10^9$ device-hours)
+\item FTLE --- Finite-Time Lyapunov Exponent
+\item GAA --- Gate-All-Around
+\item HBM --- High Bandwidth Memory
+\item NoC --- Network-on-Chip
+\item NWP --- Numerical Weather Prediction
+\item SPPT --- Stochastically Perturbed Parameterisation Tendencies
+\item SKEB --- Stochastic Kinetic Energy Backscatter
+\item SRAM --- Static Random Access Memory
+\end{itemize}
+\end{multicols}

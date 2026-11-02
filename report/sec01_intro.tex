@@ -1,0 +1,111 @@
+\section{Introduction}\label{sec:intro}
+
+\subsection{A chaotic, high-dimensional, memory-bound object}
+Numerical weather prediction (NWP) integrates a discretised set of partial differential equations
+for momentum, mass, thermodynamics and water species forward in time. The state is large: a
+0.25$^\circ$ global model carries of order $10^{8}$ grid points, a 3 km regional ensemble carrying
+$10^{7}$ points per member. The dynamics are chaotic. Two trajectories that agree to the last bit
+diverge at a rate set by the leading Lyapunov exponent, and the practical forecast horizon is the
+time it takes an initial error to grow to the scale of the analysis uncertainty. For the
+Lorenz--96 system used throughout this report as a tractable surrogate, the leading exponent is
+$\lambda_1 \approx 0.34$ day$^{-1}$ and the error-doubling time is \ACDoubling\ days
+(Fig.~\ref{fig:req}(b,c)) --- numbers that are, by construction, in the same range as operational
+atmospheric error growth \cite{lorenz1963,lorenz1996,kalnay2003}.
+
+Uncertainty is handled by running an ensemble. A deterministic forecast answers ``what will the
+weather be''; an ensemble of 30--100 members, each with perturbed initial conditions and
+stochastic physics, answers ``how likely is it''. Ensembles are what make NWP useful for
+decision-making, and they are also what make it expensive: cost scales linearly in members, and
+the linear scaling is not amortised by any cache or reuse because each member is an independent
+trajectory that nevertheless shares the same grid, coefficients and boundary data.
+
+Two further facts shape the machine this report specifies.
+
+\textbf{Arithmetic intensity is low and fixed.} A 3D stencil that reads $b$ bytes per cell and
+performs $f$ flops per cell has an intensity of $f/b$ that cannot be improved by tiling beyond the
+size of the on-chip memory. For the 24-variable physics package used here, $f \approx 4{,}540$
+flops per cell per member and $b = 192$ bytes, i.e. 23.6 flop/byte at the HBM boundary. That is
+one of the lowest intensities in high-performance computing, and it is why the kernel is a memory
+problem with arithmetic attached rather than the other way around.
+
+\textbf{The result must be reproducible and auditable.} Operational centres must be able to
+reproduce a forecast bit-for-bit for post-event analysis, and dispersion or aviation-hazard
+products are increasingly treated as safety-relevant. A machine whose numerical path contains
+atomics or dynamic scheduling cannot make that guarantee cheaply.
+
+\subsection{Why a GPU is a poor fit at the kernel level}
+Graphics processors became the default accelerator for NWP because they offer the highest
+floating-point throughput per dollar. On the kernels that dominate an atmospheric model, however,
+three structural costs remain.
+
+\textbf{Issue and data-movement overhead.} A CUDA core retires one fp32 FMA per lane per cycle at
+best, and a warp instruction carries address arithmetic, predicate handling and register-file
+traffic around it. Published energy numbers put a delivered fp32 FLOP on a data-centre GPU at
+several picojoules once the memory hierarchy is included; the arithmetic itself is a small
+fraction of that \cite{horowitz2014}. On a stencil with 23 flop/byte, the memory hierarchy is
+exercised on every FLOP.
+
+\textbf{Kernel-boundary re-fetch.} Because a GPU kernel is launched per operator, the state is
+written to and read back from HBM at each kernel boundary. Fusing an entire physics package into
+one kernel is possible in principle and hard in practice; the reference model assumes a re-fetch
+factor of 2.5, i.e. the 25.8 GB state is streamed 2.5 times per time step rather than once.
+
+\textbf{Precision inflexibility.} A GPU is fastest in fp16 or fp8 on tensor cores, formats that a
+chaotic model cannot use for its state, and slowest in the fp64 that some centres still use for
+conservation-sensitive tracers. The useful middle ground --- fp32 dynamics with fp16 or bf16
+physics, chosen per grid cell from the local ensemble spread --- has no hardware expression on a
+general-purpose SIMT machine.
+
+None of this makes GPUs bad. It makes them general. The question this report asks is what a
+machine looks like when the ensemble dimension, the halo structure and the error-growth physics are
+hardware primitives rather than software conventions.
+
+\subsection{Thesis}
+\ac{1} is built on three principles, each of which is falsifiable and each of which is tested in
+Sections~\ref{sec:results} and~\ref{sec:validation}.
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt]
+\item \textbf{Lanes carry members, not matrix rows.} 256 lanes per tile, 64 tiles, 16,384 lanes in
+      total. A stencil coefficient is broadcast to all lanes; a grid neighbour is exchanged through
+      a dedicated six-port fabric; an ensemble member never leaves its lane. Utilisation on the
+      reference kernels is 71.1\% rather than the 20--30\% typical of a stencil on a GPU.
+\item \textbf{Bytes are the budget.} The machine is designed so that a 24-variable, 3-time-level
+      tile lives in 256 KB of SRAM, a fused pass streams the 25.8 GB state exactly once per step,
+      and the halo traffic that a GPU sends through L2/L3 never leaves the register file. 56\% of
+      the energy is HBM traffic; the design is honest about that and optimises it first.
+\item \textbf{Precision follows predictability.} Where the ensemble spread is large, the forecast
+      error is dominated by chaotic uncertainty, not by the 11-bit mantissa of fp16. A per-cell
+      governor exploits this: 58\% of physics work by design (84\% by measurement) runs in fp16
+      with no detectable skill loss, while dynamics stays fp32.
+\end{enumerate}
+
+\subsection{Contributions}
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item An architecture and ISA for ensemble-native atmospheric computation, with a cycle-level
+      model of its tile pipeline and a 64-tile chip model (Sections~\ref{sec:arch}--\ref{sec:micro}).
+\item A precision-governor design grounded in a real cycled ensemble experiment, including the
+      negative result that fp8 is not usable for the state (Section~\ref{sec:precision}).
+\item A calibrated pre-silicon evaluation with ablations, a 300-sample Monte-Carlo sensitivity
+      study, and an explicit ``idealised GPU'' bound (Section~\ref{sec:results}).
+\item A 3 nm GAA process integration with backside power delivery, hybrid-bonded L3, 2.5D HBM
+      packaging, yield/cost model and qualification plan (Sections~\ref{sec:process}--\ref{sec:mfg}).
+\item A complete software stack: compiler flow, driver ABI, Python/Node SDKs and a cross-platform
+      desktop application that calls the device through one-line functions (Section~\ref{sec:software}).
+\end{itemize}
+
+\subsection{Scope and honesty}
+This is a design study. There is no silicon, no RTL netlist and no place-and-route database behind
+the numbers. The evaluation is a transparent performance model whose constants are either taken
+from the literature or stated as assumptions, and whose output is reported with an interval rather
+than a point. Where the model is weak --- the DA comparison, the GPU efficiency assumption, the
+absence of MPI scale-out --- the report says so. The value of the exercise is the architecture and
+the reasoning, not the fourth digit of a projected number.
+
+\subsection{Organisation}
+Section~\ref{sec:workload} characterises the workload and the benchmark.
+Section~\ref{sec:arch} describes the chip, Section~\ref{sec:micro} the tile and its ISA.
+Section~\ref{sec:precision} develops the precision and energy theory.
+Section~\ref{sec:results} reports performance and energy, Section~\ref{sec:validation} the
+numerical validation. Sections~\ref{sec:process} and~\ref{sec:mfg} cover silicon and
+manufacturing. Section~\ref{sec:software} the software stack, Section~\ref{sec:deployment}
+deployment and limitations, Section~\ref{sec:roadmap} the roadmap.

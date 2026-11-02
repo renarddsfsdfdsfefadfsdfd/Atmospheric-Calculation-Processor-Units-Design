@@ -1,0 +1,21 @@
+{
+  "name": "acpu-studio",
+  "productName": "ACPU Studio",
+  "version": "1.0.0",
+  "description": "ACPU Studio — scientific instrument panel for the ACPU-1 Tempest atmospheric accelerator",
+  "main": "main.js",
+  "author": "ACPU Systems",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "selftest": "node tools/selftest.mjs",
+    "shots": "node tools/shots.mjs",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0"
+  }
+}

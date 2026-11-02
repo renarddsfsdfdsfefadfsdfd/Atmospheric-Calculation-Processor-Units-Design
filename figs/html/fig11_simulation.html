@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.9in}</style></head>
+<body data-meta='{"width":6.6,"height":3.9}'>
+<div class="fig" style="grid-template-columns:1fr 1.1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel" style="grid-row:span 2"><div class="ttl"><span class="tag">a</span>Pre-silicon model stack</div>
+ <div class="col" style="gap:3pt">
+  <div class="box navy" style="font-size:6pt"><b>workload models</b><br>
+    Lorenz-96 ensemble, EnKF, 3D advection, microphysics, DA &mdash; Python, real numerics</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box teal" style="font-size:6pt"><b>AVT cycle model</b><br>
+    issue, SFU contention, SRAM banks, halo wait, precision switch &rarr; 71.1% sustained</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box" style="font-size:6pt"><b>chip model</b><br>
+    64 tiles, L2/L3/HBM contention, DVFS, leakage &rarr; 29.1 ms, 1.26 J per step</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box amber" style="font-size:6pt"><b>baseline models</b><br>
+    H100 / A100 rooflines with published efficiency ranges, power states</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box grey" style="font-size:6pt"><b>thermal / cost / reliability</b><br>
+    RC network, Monte-Carlo corners, Murphy yield, Weibull life</div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Experiment matrix</div>
+ <table class="t">
+  <tr><th>id</th><th>experiment</th><th>output</th></tr>
+  <tr><td>E1</td><td>kernel throughput</td><td>time, utilisation</td></tr>
+  <tr><td>E2</td><td>energy breakdown</td><td>J per block</td></tr>
+  <tr><td>E3</td><td>ablation</td><td>feature attribution</td></tr>
+  <tr><td>E4</td><td>Monte-Carlo</td><td>ratio distribution</td></tr>
+  <tr><td>E5</td><td>precision sweep</td><td>skill vs energy</td></tr>
+  <tr><td>E6</td><td>thermal transient</td><td>junction trace</td></tr>
+  <tr><td>E7</td><td>corner analysis</td><td>speed yield</td></tr>
+  <tr><td>E8</td><td>yield &amp; cost</td><td>$ per die</td></tr>
+ </table>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>What the model is calibrated against</div>
+ <table class="t">
+  <tr><th>quantity</th><th>source</th><th>match</th></tr>
+  <tr><td>fp32 FMA energy</td><td>Horowitz 2014, scaled</td><td>0.42 pJ</td></tr>
+  <tr><td>SRAM / HBM pJ/byte</td><td>published 3 nm / HBM3E</td><td>&plusmn;25%</td></tr>
+  <tr><td>stencil efficiency</td><td>WRF / ICON GPU studies</td><td>22&ndash;50%</td></tr>
+  <tr><td>idle &amp; TDP</td><td>H100 SXM5 data sheet</td><td>90 / 700 W</td></tr>
+  <tr><td>Lorenz-96 skill</td><td>reference EnKF</td><td>0.22 RMSE</td></tr>
+ </table>
+ <div class="sub">Every assumption is a named constant in <span class="mono">spec/acpu1.json</span>;
+   the Monte-Carlo study in Fig. 14 reports the resulting 90% interval rather than a single point.</div>
+</div>
+
+</div></body></html>

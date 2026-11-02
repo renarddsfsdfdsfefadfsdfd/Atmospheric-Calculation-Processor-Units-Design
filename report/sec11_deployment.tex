@@ -1,0 +1,87 @@
+\FloatBarrier
+\section{Deployment, economics and limitations}\label{sec:deployment}
+
+\subsection{Operational numerical weather prediction}
+An operational centre runs a cycle every six hours: an analysis, a forecast ensemble, and a
+product generation step. \ac{1} is sized for the forecast and competent at the analysis. A
+single card holds a 64-member, 4.19 M-cell, 24-variable ensemble and completes a 24-hour forecast
+in two minutes at 57 W, which means a four-card node can run the same cycle for a domain four
+times larger, or run four independent domains, at 260 W. The equivalent H100 node draws 1.05 kW at
+idle and 2.8 kW under load for the same throughput.
+
+The scale-out story is the weakest part of the design. \ac{1} has one PCIe 6.0 x16 link and no
+cache-coherent die-to-die fabric. A regional domain that fits in 48 GB is a single-card job; a
+global ensemble is not, and the halo traffic between cards would go through PCIe at 100 GB/s,
+which is 24$\times$ slower than the on-card fabric. A production cluster would therefore
+decompose by ensemble member (each card owns a subset of members for the full domain) rather than
+by spatial subdomain, which keeps inter-card traffic to boundary conditions and output. That is a
+real constraint and it shaped the design: the machine is a single-domain appliance, not a
+scale-out building block.
+
+\subsection{Research groups and forecast-as-a-service}
+The second deployment is a university group or a commercial provider that runs many small
+ensembles rather than one large one. Here the relevant numbers are the efficiency mode and the
+cost of ownership. At 1.05 GHz and 0.55 V the card delivers the same forecast in 172 s at 33 W,
+which is a 20\% energy reduction for a 37\% time penalty; for a job that runs overnight, that is
+free. The five-year cost per forecast day is \$0.41 against \$8.22 for the H100, and the gap is
+capital cost, not electricity.
+
+\subsection{Emergency response and dispersion}
+A third deployment is time-critical and safety-relevant: a release of a hazardous substance, a
+volcanic ash cloud, a wildfire smoke plume. The requirement is not throughput but a bounded
+response time and a reproducible answer that can be defended after the event. \ac{1} has a
+static schedule, a compiler-known cycle count per tile and no dynamic scheduling in the numerical
+path, so the worst-case execution time of a dispersion calculation is a computed number rather
+than a statistical one. The same property gives bit-reproducibility, which matters when a
+regulator asks why the plume was predicted to go east rather than west.
+
+\subsection{Limitations and threats to validity}
+The report is only useful if its weaknesses are stated as clearly as its results.
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt]
+\item \textbf{No silicon.} Every chip number is a model projection. The model is calibrated
+      against published data and its assumptions are sampled, but a first silicon part can
+      plausibly land 20--30\% away from the projected energy on real kernels.
+\item \textbf{The GPU baseline is a model.} The H100 comparison assumes a 0.30 stencil efficiency
+      and a particular power state. Both are defensible and both are varied; the conclusion
+      survives at 100\% GPU utilisation with a 3.9$\times$ ratio, but a reader who believes GPUs
+      achieve 60\% on this workload should read the 8.2$\times$ end of Fig.~\ref{fig:cuda}(e).
+\item \textbf{The workload is a subset.} Chemistry beyond passive tracers, full radiation with
+      hundreds of bands, atmospheric composition and land-surface models are not in the
+      benchmark. They are more SFU-heavy, which would help the ASIC's relative position, but they
+      are not measured.
+\item \textbf{Precision validation is on a surrogate.} Lorenz--96 supports the argument, not the
+      design point. A full-model study is the first bring-up task.
+\item \textbf{No scale-out study.} The inter-card fabric is a PCIe link and the report does not
+      pretend otherwise.
+\item \textbf{No software maturity claim.} The compiler described in Section~\ref{sec:software}
+      is a design, and the application that ships with this report runs on a virtual device.
+\end{enumerate}
+
+\subsection{What would falsify the thesis}
+A single measurement would settle most of the argument: run the ten kernels of Table~\ref{tab:kernels}
+on an H100 with a state-of-the-art stencil compiler and measure joules per delivered forecast at
+matched skill. If that number is within 2$\times$ of the projection in this report, the
+architectural thesis is wrong and the correct conclusion is that CUDA is good enough. The
+prediction of this report is that it will be 6--10$\times$ worse, and the prediction is stated in
+those terms so that it can be checked.
+
+\begin{table}[t]
+\centering\small
+\caption{Deployment comparison. Energy is per forecast-and-analysis day; cost is five-year total
+cost of ownership per day at \$0.12/kWh.}
+\label{tab:deploy}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Scenario & ACPU-1 node & H100 node & Ratio\\
+\midrule
+Cards & 4 & 4 & \\
+Idle power & 24 W & 360 W & 15$\times$\\
+Load power (W1) & 228 W & 1.05 kW & 4.6$\times$\\
+Forecast time (same domain) & 126 s & 278 s & 2.2$\times$ faster\\
+Energy per forecast day & 34.2 kJ & 316 kJ & 9.2$\times$\\
+Capital cost & \$6.0k & \$120k & 20$\times$\\
+Cost per forecast day & \$1.64 & \$32.9 & 20$\times$\\
+\bottomrule
+\end{tabular}
+\end{table}

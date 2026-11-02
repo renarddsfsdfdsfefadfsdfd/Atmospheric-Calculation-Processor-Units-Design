@@ -1,0 +1,12 @@
+#!/bin/sh
+# Minimal npm shim for electron-builder's node-module collector.
+# ACPU Studio has no production dependencies (Electron and electron-builder are
+# devDependencies), so `npm list --prod` legitimately returns an empty tree.
+case "$1" in
+  list)
+    echo '{"name":"acpu-studio","version":"1.0.0","dependencies":{}}'
+    ;;
+  *)
+    exit 0
+    ;;
+esac

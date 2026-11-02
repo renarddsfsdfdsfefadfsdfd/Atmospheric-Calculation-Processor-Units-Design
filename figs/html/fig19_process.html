@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.4in}</style></head>
+<body data-meta='{"width":6.6,"height":3.4}'>
+<div class="fig" style="grid-template-rows:1.15fr 1fr;grid-template-columns:1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Nanosheet gate-all-around flow (N3G, 18 EUV / 61 DUV masks)</div>
+ <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:3pt;margin-top:2pt">
+  <div class="box grey" style="font-size:5.4pt"><b>1</b> STI + well<br>trench isolation</div>
+  <div class="box grey" style="font-size:5.4pt"><b>2</b> SiGe/Si<br>superlattice epi</div>
+  <div class="box grey" style="font-size:5.4pt"><b>3</b> fin cut +<br>channel release</div>
+  <div class="box teal" style="font-size:5.4pt"><b>4</b> inner spacer<br>+ S/D epi</div>
+  <div class="box teal" style="font-size:5.4pt"><b>5</b> HKMG<br>replacement gate</div>
+  <div class="box teal" style="font-size:5.4pt"><b>6</b> contacts +<br>MOL</div>
+  <div class="box navy" style="font-size:5.4pt"><b>7</b> BEOL<br>12 metal layers</div>
+  <div class="box navy" style="font-size:5.4pt"><b>8</b> BSPDN:<br>wafer bond</div>
+  <div class="box navy" style="font-size:5.4pt"><b>9</b> backside<br>thinning + nTSV</div>
+  <div class="box amber" style="font-size:5.4pt"><b>10</b> backside<br>metal 3 layers</div>
+  <div class="box amber" style="font-size:5.4pt"><b>11</b> hybrid bond<br>L3 dies</div>
+  <div class="box amber" style="font-size:5.4pt"><b>12</b> CoWoS +<br>HBM attach</div>
+ </div>
+ <div class="sub">Steps 1&ndash;6 are front-end (EUV critical layers at 2, 3, 5); 7&ndash;10 build the
+   power delivery on the wafer backside; 11&ndash;12 are packaging.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Backside power delivery integration</div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:6pt">
+  <div>
+   <table class="t">
+    <tr><th>step</th><th>process</th><th>control</th></tr>
+    <tr><td>B1</td><td>carrier wafer bonding</td><td>alignment &lt; 0.5 &micro;m</td></tr>
+    <tr><td>B2</td><td>Si thinning to 400 nm</td><td>TTV &lt; 1 &micro;m</td></tr>
+    <tr><td>B3</td><td>nTSV 0.4 &micro;m pitch</td><td>Rc &lt; 1 &Omega;</td></tr>
+    <tr><td>B4</td><td>3 backside metals</td><td>IR drop &lt; 50 mV</td></tr>
+    <tr><td>B5</td><td>backside passivation</td><td>leakage &lt; 1 nA</td></tr>
+   </table>
+  </div>
+  <div class="box teal" style="font-size:6pt;line-height:1.45">
+   <b>Why backside power</b><br>
+   &bull; front-side tracks freed for signal: +5.4% routed area<br>
+   &bull; IR drop 62 &rarr; 48 mV at 80 A<br>
+   &bull; via resistance 1.8 &rarr; 0.9 &Omega;<br>
+   &bull; 6% lower dynamic power at iso-clock
+  </div>
+ </div>
+ <div class="sub" style="margin-top:5pt">BSPDN is what makes a 0.75 V, 80 A, 65 W part practical in a
+   two-slot card: the front-side grid alone would have needed 14 metal layers.</div>
+</div>
+
+</div></body></html>

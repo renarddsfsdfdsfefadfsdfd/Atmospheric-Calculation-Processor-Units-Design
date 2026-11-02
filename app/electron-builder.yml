@@ -1,0 +1,72 @@
+appId: dev.acpu.studio
+productName: ACPU Studio
+copyright: "ACPU Systems · ACPU-1 Tempest program"
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - main.js
+  - preload.js
+  - core/**/*
+  - renderer/**/*
+  - package.json
+  - "!tools/**"
+  - "!sdk/**"
+  - "!shots/**"
+  - "!data/**"
+  - "!dist/**"
+  - "!.cache/**"
+  - "!node_modules/electron/**"
+  - "!node_modules/electron-builder/**"
+
+asar: true
+asarUnpack:
+  - core/**/*
+
+extraMetadata:
+  name: acpu-studio
+
+mac:
+  category: public.app-category.developer-tools
+  # A dmg needs hdiutil; the release pipeline builds it on a signing host.
+  # The zip is the portable mac artefact produced here.
+  target:
+    - target: zip
+      arch: [universal]
+  darkModeSupport: true
+  hardenedRuntime: false
+  gatekeeperAssess: false
+dmg:
+  title: "ACPU Studio ${version}"
+  window:
+    width: 640
+    height: 400
+
+win:
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+    - target: portable
+      arch: [x64]
+  artifactName: "${productName}-${version}-${arch}-setup.${ext}"
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: ACPU Studio
+portable:
+  artifactName: "${productName}-${version}-portable.${ext}"
+
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: tar.gz
+      arch: [x64]
+  category: Development
+  synopsis: Instrument panel for the ACPU-1 Tempest atmospheric accelerator
+  description: "ACPU Studio drives the virtual ACPU-1 Tempest device: ensemble forecasting, Lyapunov spectra, EnKF analysis, tracer transport and device telemetry."
+  maintainer: ACPU Systems

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
+<title>ACPU Studio</title>
+<link rel="stylesheet" href="./css/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="wordmark">ACPU</span>
+      <span class="product">Studio</span>
+      <span class="rev">rev 1.0</span>
+    </div>
+    <div class="chips" id="device-chips" aria-live="off"></div>
+    <div class="topbar-right">
+      <div class="pill idle" id="run-state"><span class="dot"></span><span id="run-state-label">Idle</span></div>
+      <button class="ghost-btn" id="btn-service" title="Local device service status">Service</button>
+      <button class="ghost-btn" id="btn-settings">Settings</button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="rail">
+      <div class="rail-nav" id="rail-nav">
+        <button class="rail-item active" data-view="console">
+          <span class="rail-label">Console</span><span class="rail-key">1</span>
+        </button>
+        <button class="rail-item" data-view="device">
+          <span class="rail-label">Device</span><span class="rail-key">2</span>
+        </button>
+        <button class="rail-item" data-view="runs">
+          <span class="rail-label">Runs</span><span class="rail-key">3</span>
+        </button>
+        <button class="rail-item" data-view="docs">
+          <span class="rail-label">Docs</span><span class="rail-key">4</span>
+        </button>
+      </div>
+      <div class="rail-section">
+        <div class="rail-heading">Formula library</div>
+        <div class="rail-search">
+          <input id="formula-search" type="text" placeholder="Search formulas  ⌘K" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="rail-list" id="formula-list"></div>
+      </div>
+      <div class="rail-foot" id="rail-foot">
+        <div class="rail-stat"><span>Runs</span><b id="stat-runs">0</b></div>
+        <div class="rail-stat"><span>Energy</span><b id="stat-energy">0 J</b></div>
+      </div>
+    </nav>
+
+    <main class="main" id="main">
+      <section class="view" id="view-console"></section>
+      <section class="view" id="view-device" hidden></section>
+      <section class="view" id="view-runs" hidden></section>
+      <section class="view" id="view-docs" hidden></section>
+    </main>
+
+    <aside class="telemetry" id="telemetry"></aside>
+  </div>
+
+  <div class="scrim" id="settings-scrim" hidden></div>
+  <div class="modal" id="settings-modal" hidden role="dialog" aria-modal="true" aria-label="Settings"></div>
+  <div class="chart-tip" id="chart-tip" hidden></div>
+  <div class="toasts" id="toasts"></div>
+
+  <script src="./js/charts.js"></script>
+  <script src="./js/ui.js"></script>
+  <script src="./js/console.js"></script>
+  <script src="./js/device.js"></script>
+  <script src="./js/runs.js"></script>
+  <script src="./js/docs.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

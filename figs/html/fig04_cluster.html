@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.6in}</style></head>
+<body data-meta='{"width":6.6,"height":3.6}'>
+<div class="fig" style="grid-template-columns:0.9fr 1.15fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Ensemble cluster</div>
+ <div style="display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr);gap:2.5pt;height:64%">
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 0</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 1</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 2</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 3</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 4</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 5</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 6</div>
+  <div class="box teal" style="font-size:5.6pt;padding:2pt">AVT 7</div>
+ </div>
+ <div class="box navy" style="font-size:5.4pt;margin-top:3pt">L2 3 MB &middot; scheduler &middot; DVFS &middot; ECC</div>
+ <div class="sub" style="margin-top:3pt">2.4 TFLOPS fp32 per cluster. 64 tiles = 59 TFLOPS.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>AVT datapath</div>
+ <div class="col" style="gap:3pt;height:92%;justify-content:space-between">
+  <div class="box grey" style="font-size:5.8pt;text-align:center;padding:3pt">fetch / decode &middot; 4-wide VLIW</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div class="box teal" style="font-size:5.8pt;text-align:center;padding:3pt">precision governor + scoreboard</div>
+  <div class="arrow" style="font-size:7pt">&#9660;</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5pt">
+    <div class="box" style="font-size:5.6pt;text-align:center;padding:5pt">16&times;16 FMA<br>fp32 / fp16 / fp8</div>
+    <div class="box" style="font-size:5.6pt;text-align:center;padding:5pt">16&times;16 FMA<br>second issue slot</div>
+  </div>
+  <div class="box amber" style="font-size:5.6pt;text-align:center;padding:2.5pt">SFU 64 lanes &middot; Kahan accumulator &middot; reduction tree</div>
+  <div class="box grey" style="font-size:5.6pt;text-align:center;padding:2.5pt">SRAM 256 KB &middot; 3 time levels &middot; 24 variables</div>
+  <div class="box grey" style="font-size:5.6pt;text-align:center;padding:2.5pt">halo ports 6 &times; 32 B/cycle &middot; 345 GB/s</div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Pipeline: 6 stages</div>
+<div id="pipe" style="display:grid;grid-template-columns:24pt repeat(6,1fr);grid-template-rows:repeat(6,1fr);gap:1.5pt;height:70%"></div>
+ <div class="sub" style="margin-top:6pt">Independent 16-lane groups are interleaved so the 4-cycle
+   FMA latency is hidden; the amber cell marks the only dependent stall in the schedule.</div>
+<script>
+const st=["IF","ID","ISS","FMA","MEM","WB"], pipe=document.getElementById("pipe");
+for(let i=0;i<5;i++){
+  const lab=document.createElement("div"); lab.className="lbl"; lab.textContent="op "+(i+1); pipe.appendChild(lab);
+  for(let j=0;j<6;j++){
+    const d=document.createElement("div");
+    const active=j>=i && j<i+4;
+    d.style.cssText="border:0.5pt solid #CBD5E1;border-radius:2pt;"+
+      (active?"background:"+(j===3?"#F6D9AE":"#E9F4F5")+";":"background:#fff;");
+    pipe.appendChild(d);
+  }
+}
+const stg=document.createElement("div"); stg.className="lbl"; stg.textContent="stage"; pipe.appendChild(stg);
+st.forEach(t=>{const d=document.createElement("div");d.className="lbl";d.style.textAlign="center";d.textContent=t;pipe.appendChild(d);});
+</script>
+</div>
+
+</div></body></html>
