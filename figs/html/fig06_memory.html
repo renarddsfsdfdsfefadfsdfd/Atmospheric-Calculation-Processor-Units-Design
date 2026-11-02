@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:4.0in}</style></head>
+<body data-meta='{"width":6.6,"height":4.0}'>
+<div class="fig" style="grid-template-columns:1.15fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Memory hierarchy</div>
+<svg viewBox="0 0 220 132" style="width:100%;height:88%">
+  <g font-family="Helvetica">
+    <rect x="6" y="6" width="208" height="18" rx="2" fill="#FDF3E6" stroke="#D9822B" stroke-width="0.7"/>
+    <text x="12" y="18" font-size="6.4" fill="#1B2430">HBM3E &middot; 48 GB</text>
+    <text x="208" y="18" font-size="6.4" text-anchor="end" fill="#6B7A8C">2.4 TB/s</text>
+    <rect x="18" y="30" width="184" height="18" rx="2" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.7"/>
+    <text x="24" y="42" font-size="6.4">L3 stacked &middot; 128 MB</text>
+    <text x="196" y="42" font-size="6.4" text-anchor="end" fill="#6B7A8C">8 TB/s</text>
+    <rect x="30" y="54" width="160" height="18" rx="2" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.7"/>
+    <text x="36" y="66" font-size="6.4">L2 &middot; 24 MB (3 MB / cluster)</text>
+    <text x="184" y="66" font-size="6.4" text-anchor="end" fill="#6B7A8C">9.6 TB/s</text>
+    <rect x="42" y="78" width="136" height="18" rx="2" fill="#E9F4F5" stroke="#0E7C86" stroke-width="0.7"/>
+    <text x="48" y="90" font-size="6.4">AVT SRAM &middot; 16 MB</text>
+    <text x="172" y="90" font-size="6.4" text-anchor="end" fill="#6B7A8C">35 TB/s</text>
+    <rect x="56" y="102" width="108" height="18" rx="2" fill="#E9F4F5" stroke="#3FA7AE" stroke-width="0.7"/>
+    <text x="62" y="114" font-size="6.4">register file &middot; 2 MB</text>
+    <text x="158" y="114" font-size="6.4" text-anchor="end" fill="#6B7A8C">120 TB/s</text>
+  </g>
+</svg>
+<div class="sub">The working set of a tile (3 time levels &times; 24 variables &times; 910 cells)
+  fits in 256 KB; everything above it is a streaming path.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Bytes moved per time step</div>
+ <div class="row" style="font-size:6pt"><span style="width:52pt">SRAM</span>
+   <div class="bar" style="flex:1"><i style="width:100%;background:#0E7C86"></i></div>
+   <span class="num" style="width:40pt;text-align:right">274 GB</span></div>
+ <div class="row" style="font-size:6pt;margin-top:3pt"><span style="width:52pt">L2</span>
+   <div class="bar" style="flex:1"><i style="width:6%;background:#0E7C86"></i></div>
+   <span class="num" style="width:40pt;text-align:right">16.4 GB</span></div>
+ <div class="row" style="font-size:6pt;margin-top:3pt"><span style="width:52pt">L3</span>
+   <div class="bar" style="flex:1"><i style="width:18%;background:#0E7C86"></i></div>
+   <span class="num" style="width:40pt;text-align:right">49.2 GB</span></div>
+ <div class="row" style="font-size:6pt;margin-top:3pt"><span style="width:52pt">HBM</span>
+   <div class="bar" style="flex:1"><i style="width:19%;background:#D9822B"></i></div>
+   <span class="num" style="width:40pt;text-align:right">51.5 GB</span></div>
+ <div class="sub" style="margin-top:6pt">The tile SRAM sees 5.3&times; more traffic than HBM and costs
+   213&times; less per byte, which is why the fused pass is the central design choice.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Energy per byte</div>
+ <table class="t">
+  <tr><th>level</th><th>pJ/byte</th><th>relative</th></tr>
+  <tr><td>HBM3E</td><td class="num">16.0</td><td>213x</td></tr>
+  <tr><td>L3</td><td class="num">0.40</td><td>5.3x</td></tr>
+  <tr><td>L2</td><td class="num">0.138</td><td>1.8x</td></tr>
+  <tr><td>AVT SRAM</td><td class="num">0.075</td><td>1.0x</td></tr>
+ </table>
+ <div class="sub" style="margin-top:4pt">A halo byte that leaks to L3 costs 5.3 tile-SRAM bytes;
+   one that leaks to HBM costs 213. The fabric exists to keep halos in the first column.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">d</span>Residency rule of thumb</div>
+ <div class="box teal" style="font-size:6.2pt;line-height:1.45">
+   256 KB tile SRAM<br>
+   &divide; (24 variables &times; 4 B &times; 3 time levels) = <b>910 cells</b><br><br>
+   64 tiles &rarr; <b>58 k cells</b> in flight<br>
+   4.19 M cells &rarr; 72 sweeps per step<br><br>
+   state streamed to HBM once per step = 51.5 GB
+ </div>
+ <div class="sub" style="margin-top:4pt">Larger tiles would cut HBM traffic but exceed the SRAM
+   energy budget; 910 cells is the optimum of the model.</div>
+</div>
+
+</div></body></html>

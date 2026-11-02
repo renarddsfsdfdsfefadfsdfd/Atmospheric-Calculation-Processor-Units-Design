@@ -1,0 +1,63 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:2.5in}</style></head>
+<body data-meta='{"width":6.6,"height":2.5}'>
+<div class="fig" style="grid-template-columns:1.05fr 1fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>3D tile topology</div>
+<svg viewBox="0 0 210 168" style="width:100%;height:auto">
+  <g fill="#E9F4F5" stroke="#0E7C86" stroke-width="0.8">
+    <rect x="14" y="76" width="34" height="30" rx="2"/><rect x="64" y="76" width="34" height="30" rx="2"/>
+    <rect x="114" y="76" width="34" height="30" rx="2"/><rect x="164" y="76" width="34" height="30" rx="2"/>
+    <rect x="14" y="120" width="34" height="30" rx="2"/><rect x="64" y="120" width="34" height="30" rx="2"/>
+    <rect x="114" y="120" width="34" height="30" rx="2"/><rect x="164" y="120" width="34" height="30" rx="2"/>
+  </g>
+  <g stroke="#3FA7AE" stroke-width="0.9" fill="none">
+    <path d="M48 91 H64 M98 91 H114 M148 91 H164"/>
+    <path d="M31 106 V120 M81 106 V120 M131 106 V120 M181 106 V120"/>
+  </g>
+  <g fill="#10233F" font-size="6" font-family="Helvetica" text-anchor="middle">
+    <text x="31" y="94">T0</text><text x="81" y="94">T1</text><text x="131" y="94">T2</text><text x="181" y="94">T3</text>
+    <text x="31" y="138">T4</text><text x="81" y="138">T5</text><text x="131" y="138">T6</text><text x="181" y="138">T7</text>
+  </g>
+  <g stroke="#D9822B" stroke-width="1" stroke-dasharray="3 2" fill="none">
+    <rect x="10" y="72" width="42" height="38" rx="3"/>
+    <rect x="60" y="72" width="42" height="38" rx="3"/>
+  </g>
+  <g fill="#6B7A8C" font-size="5.4" font-family="Helvetica">
+    <text x="104" y="30" text-anchor="middle">each tile: 6 ports (E, W, N, S, up, down)</text>
+    <text x="104" y="42" text-anchor="middle">32 B/cycle per port = 345 GB/s</text>
+    <text x="104" y="54" text-anchor="middle">aggregate 16 TB/s NoC</text>
+  </g>
+  <g fill="#6B7A8C" font-size="5.2" font-family="Helvetica">
+    <text x="104" y="163" text-anchor="middle">16 of 64 tiles shown; the array wraps in row, column and level</text>
+  </g>
+</svg>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Halo wait: 46 cycles</div>
+ <div style="display:flex;gap:1.5pt;margin-top:6pt;height:22pt">
+   <div class="box grey" style="width:8%;padding:1pt;font-size:5pt;text-align:center">2</div>
+   <div class="box grey" style="width:13%;padding:1pt;font-size:5pt;text-align:center">router 6</div>
+   <div class="box grey" style="width:9%;padding:1pt;font-size:5pt;text-align:center">link 4</div>
+   <div class="box amber" style="width:62%;padding:1pt;font-size:5pt;text-align:center">neighbour ready + sync 34</div>
+ </div>
+ <div class="row" style="justify-content:space-between;font-size:5.4pt;margin-top:3pt">
+   <span>issue</span><span>fabric</span><span>arrival</span></div>
+ <div class="sub" style="margin-top:8pt">Three stencil kernels per step, two exchanges each, fully overlapped
+   with arithmetic on other tiles: 276 cycles hidden in 61,900.</div>
+ <div class="box teal" style="margin-top:8pt;font-size:6pt;text-align:center">0.5% of the step budget</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Bandwidth: demand vs supply</div>
+ <div class="lbl">demand &mdash; 4.2 GB/s per tile</div>
+ <div class="bar" style="height:9pt"><i style="width:1.2%"></i></div>
+ <div class="lbl" style="margin-top:6pt">supply &mdash; 345.6 GB/s per tile</div>
+ <div class="bar" style="height:9pt"><i style="width:100%"></i></div>
+ <div class="sub" style="margin-top:8pt">82&times; headroom absorbs bursty exchange at kernel boundaries.
+   A shared-L3 implementation would need 4.5&times; more energy per halo byte and would add
+   3&times; the latency.</div>
+ <div class="legend" style="margin-top:10pt"><span><i class="sw" style="background:#0E7C86"></i>direct fabric</span>
+   <span><i class="sw" style="background:#D9822B"></i>through L3</span></div>
+</div>
+
+</div></body></html>

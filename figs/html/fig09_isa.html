@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.5in}</style></head>
+<body data-meta='{"width":6.6,"height":3.5}'>
+<div class="fig" style="grid-template-columns:1.35fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel" style="grid-row:span 2"><div class="ttl"><span class="tag">a</span>AVISA instruction format (64 bit)</div>
+<svg viewBox="0 0 250 150" style="width:100%;height:64%">
+ <g font-family="Helvetica" font-size="5.6">
+  <rect x="6" y="8" width="40" height="20" fill="#EDF1F7" stroke="#10233F"/>
+  <text x="26" y="21" text-anchor="middle">opcode 8</text>
+  <rect x="46" y="8" width="26" height="20" fill="#E9F4F5" stroke="#0E7C86"/>
+  <text x="59" y="21" text-anchor="middle">prec 3</text>
+  <rect x="72" y="8" width="24" height="20" fill="#F1F4F8" stroke="#94A3B8"/>
+  <text x="84" y="21" text-anchor="middle">vmask 3</text>
+  <rect x="96" y="8" width="28" height="20" fill="#FDF3E6" stroke="#D9822B"/>
+  <text x="110" y="21" text-anchor="middle">rd 5</text>
+  <rect x="124" y="8" width="28" height="20" fill="#FDF3E6" stroke="#D9822B"/>
+  <text x="138" y="21" text-anchor="middle">rs1 5</text>
+  <rect x="152" y="8" width="28" height="20" fill="#FDF3E6" stroke="#D9822B"/>
+  <text x="166" y="21" text-anchor="middle">rs2 5</text>
+  <rect x="180" y="8" width="64" height="20" fill="#EDF1F7" stroke="#10233F"/>
+  <text x="212" y="21" text-anchor="middle">immediate / descriptor 24</text>
+  <text x="6" y="42" font-size="5.2" fill="#6B7A8C">bits 63</text>
+  <text x="244" y="42" text-anchor="end" font-size="5.2" fill="#6B7A8C">0</text>
+ </g>
+</svg>
+ <table class="t" style="margin-top:2pt">
+  <tr><th>opcode</th><th>operation</th><th>issue cost</th></tr>
+  <tr><td>0x01</td><td>FMA.TILE</td><td>1 lane-cycle</td></tr>
+  <tr><td>0x08</td><td>STENCIL3D (7-point, fused)</td><td>1 lane-cycle / point</td></tr>
+  <tr><td>0x10</td><td>ADVECT.SL (8-point gather)</td><td>2 lane-cycles</td></tr>
+  <tr><td>0x14</td><td>ENS.SPREAD (reduce 256 lanes)</td><td>9 cycles</td></tr>
+  <tr><td>0x18</td><td>ENS.TL (twin trajectory step)</td><td>2 lane-cycles</td></tr>
+  <tr><td>0x1c</td><td>DA.GAIN (16&times;16 solve)</td><td>38 cycles</td></tr>
+  <tr><td>0x20</td><td>PHYS.SAT (Clausius-Clapeyron)</td><td>1 SFU slot</td></tr>
+  <tr><td>0x24</td><td>RNG.PHILOX (counter mode)</td><td>1 lane-cycle / 4 draws</td></tr>
+  <tr><td>0x28</td><td>REDUCE.CONS (mass / energy audit)</td><td>12 cycles</td></tr>
+  <tr><td>0x2c</td><td>PREC.SET (per-tile mode)</td><td>14 cycles</td></tr>
+ </table>
+ <div class="sub">Descriptors carry stencil coefficients and halo offsets; the ISA has no
+   branch, no cache control and no virtual memory &mdash; all static, all analyzable.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Arithmetic formats</div>
+ <table class="t">
+  <tr><th>format</th><th>mantissa</th><th>lanes</th><th>peak</th></tr>
+  <tr><td>fp32</td><td>23 + 1</td><td>256</td><td class="num">59 TF</td></tr>
+  <tr><td>fp16</td><td>10 + 1</td><td>512</td><td class="num">118 TF</td></tr>
+  <tr><td>bf16</td><td>7 + 1</td><td>512</td><td class="num">118 TF</td></tr>
+  <tr><td>fp8 e4m3</td><td>3 + 1</td><td>1024</td><td class="num">236 TF</td></tr>
+  <tr><td>int8</td><td>&mdash;</td><td>1024</td><td class="num">236 TOPS</td></tr>
+ </table>
+ <div class="sub">Mixed modes are opportunistic: dynamics never leaves fp32.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Why a custom ISA</div>
+ <div class="box teal" style="font-size:6pt;line-height:1.4">
+  one STENCIL3D retires 7 loads, 7 MACs and a halo exchange that would take 19 generic
+  instructions on a GPU;
+  <br><br>
+  no divergence, no speculation, no replay &mdash; the worst-case cycle count of a tile is
+  known at compile time (61,900 cycles for the W1 step).
+ </div>
+</div>
+
+</div></body></html>

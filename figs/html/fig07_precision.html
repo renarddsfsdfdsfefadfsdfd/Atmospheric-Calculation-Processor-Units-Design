@@ -1,0 +1,112 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:4.6in}</style></head>
+<body data-meta='{"width":6.6,"height":4.6}'>
+<div class="fig" style="grid-template-columns:1fr 1fr 1.1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>Precision governor loop</div>
+ <div class="col" style="gap:2pt;font-size:5.7pt">
+   <div class="box grey" style="text-align:center">ensemble spread &sigma;(cell)</div>
+   <div class="arrow" style="font-size:7pt">&#9660;</div>
+   <div class="box teal" style="text-align:center">threshold compare + hysteresis</div>
+   <div class="arrow" style="font-size:7pt">&#9660;</div>
+   <div class="box amber" style="text-align:center">precision class / cell</div>
+   <div class="arrow" style="font-size:7pt">&#9660;</div>
+   <div class="box grey" style="text-align:center">lane mode register &rarr; FMA issue</div>
+   <div class="arrow" style="font-size:7pt">&#9650;</div>
+   <div class="box navy" style="text-align:center">error budget from lead time + obs density</div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>State machine</div>
+<svg viewBox="0 0 210 130" style="width:100%;height:82%">
+ <defs><marker id="a" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+   <path d="M0,0 L5,2.5 L0,5 z" fill="#64748B"/></marker></defs>
+ <g font-family="Helvetica" font-size="5.8">
+  <rect x="8" y="10" width="58" height="20" rx="3" fill="#EDF1F7" stroke="#10233F"/>
+  <text x="37" y="23" text-anchor="middle">FP32 (safe)</text>
+  <rect x="144" y="10" width="58" height="20" rx="3" fill="#FDF3E6" stroke="#D9822B"/>
+  <text x="173" y="23" text-anchor="middle">FP16 (fast)</text>
+  <rect x="8" y="88" width="58" height="20" rx="3" fill="#E9F4F5" stroke="#0E7C86"/>
+  <text x="37" y="101" text-anchor="middle">FP8 (physics)</text>
+  <rect x="144" y="88" width="58" height="20" rx="3" fill="#F1F4F8" stroke="#94A3B8"/>
+  <text x="173" y="101" text-anchor="middle">REPAIR (FP32)</text>
+  <g stroke="#64748B" fill="none" stroke-width="0.7" marker-end="url(#a)">
+   <path d="M66 18 H142"/><path d="M173 30 V86"/><path d="M144 98 H68"/>
+   <path d="M37 30 V86"/><path d="M96 18 C110 40 110 60 96 98"/>
+  </g>
+  <text x="104" y="14" font-size="5" fill="#6B7A8C" text-anchor="middle">spread &gt; 0.30</text>
+  <text x="180" y="60" font-size="5" fill="#6B7A8C">blk &gt; 55% fp16</text>
+  <text x="104" y="108" font-size="5" fill="#6B7A8C" text-anchor="middle">budget exhausts</text>
+  <text x="60" y="60" font-size="5" fill="#6B7A8C">spread &lt; 0.15</text>
+ </g>
+</svg>
+<div class="sub">Hysteresis prevents mode thrash; the repair state re-runs only flagged cells.</div>
+</div>
+
+<div class="panel" style="grid-row:span 2"><div class="ttl"><span class="tag">c</span>Operating curve</div>
+<svg viewBox="0 0 210 300" style="width:100%;height:64%">
+ <g stroke="#E2E8F0" stroke-width="0.5">
+  <line x1="30" y1="20" x2="30" y2="250"/><line x1="30" y1="250" x2="200" y2="250"/>
+  <line x1="30" y1="212" x2="200" y2="212" stroke-dasharray="2 2"/>
+  <line x1="30" y1="174" x2="200" y2="174" stroke-dasharray="2 2"/>
+  <line x1="30" y1="136" x2="200" y2="136" stroke-dasharray="2 2"/>
+  <line x1="30" y1="98" x2="200" y2="98" stroke-dasharray="2 2"/>
+  <line x1="30" y1="60" x2="200" y2="60" stroke-dasharray="2 2"/>
+ </g>
+ <polyline fill="none" stroke="#D9822B" stroke-width="1.5"
+   points="30,236 64,190 98,150 132,110 166,78 196,58"/>
+ <line x1="30" y1="118" x2="196" y2="118" stroke="#0E7C86" stroke-width="1.2" stroke-dasharray="4 2"/>
+ <circle cx="98" cy="150" r="2.2" fill="#D9822B"/>
+ <g font-family="Helvetica" font-size="5.4" fill="#64748B">
+  <text x="24" y="254" text-anchor="end">0.57</text>
+  <text x="24" y="216" text-anchor="end">0.66</text>
+  <text x="24" y="178" text-anchor="end">0.75</text>
+  <text x="24" y="140" text-anchor="end">0.84</text>
+  <text x="24" y="102" text-anchor="end">0.93</text>
+  <text x="24" y="64" text-anchor="end">1.02</text>
+  <text x="30" y="266">60%</text><text x="75" y="266">70%</text><text x="120" y="266">80%</text>
+  <text x="165" y="266">90%</text><text x="196" y="266" text-anchor="end">100%</text>
+  <text x="112" y="280" text-anchor="middle" fill="#1B2430">fp16 coverage of physics work</text>
+  <text x="112" y="34" text-anchor="middle" fill="#D9822B">energy per cell (relative)</text>
+  <text x="120" y="112" text-anchor="middle" fill="#0E7C86">RMSE at day 10: flat</text>
+ </g>
+</svg>
+ <div class="sub">Energy falls linearly with coverage while skill is unchanged within 0.4%; the
+   marker is the 84% point validated by the numerical experiment.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">d</span>Design point vs measured</div>
+ <div class="row" style="font-size:6pt"><span style="width:46pt">design</span>
+  <div class="bar" style="flex:1"><i style="width:58%"></i></div><span class="num">58%</span></div>
+ <div class="row" style="font-size:6pt;margin-top:3pt"><span style="width:46pt">validated</span>
+  <div class="bar" style="flex:1"><i style="width:84%;background:#D9822B"></i></div><span class="num">84%</span></div>
+ <div class="sub" style="margin-top:4pt">The hardware governor is provisioned at 58% coverage, a
+   deliberate margin of 26 points below what the numerical experiment supports.</div>
+ <table class="t" style="margin-top:5pt">
+  <tr><th>threshold</th><th>coverage</th><th>energy</th><th>RMSE d10</th></tr>
+  <tr><td>0.80</td><td>60%</td><td>0.743</td><td>2.750</td></tr>
+  <tr><td>0.50</td><td>72%</td><td>0.691</td><td>2.751</td></tr>
+  <tr><td>0.30</td><td>84%</td><td>0.640</td><td>2.745</td></tr>
+  <tr><td>0.10</td><td>99%</td><td>0.575</td><td>2.745</td></tr>
+ </table>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">e</span>Precision map (one tile, 32&times;32 cells)</div>
+ <div id="pmap" style="display:grid;grid-template-columns:repeat(16,1fr);gap:0.6pt;height:78%"></div>
+ <div class="legend" style="margin-top:3pt"><span><i class="sw" style="background:#0E7C86"></i>fp32</span>
+  <span><i class="sw" style="background:#D9822B"></i>fp16</span>
+  <span><i class="sw" style="background:#B4453C"></i>fp8</span></div>
+<script>
+const g=document.getElementById("pmap");
+for(let i=0;i<256;i++){
+  const r=(i/16)|0,c=i%16;
+  const s=Math.sin(r/3.1)*Math.cos(c/4.3)+0.35*Math.sin((r+c)/2.2);
+  const col=s>0.45?"#B4453C":s>0.05?"#D9822B":"#0E7C86";
+  const d=document.createElement("div");
+  d.style.cssText="background:"+col+";border-radius:0.5pt;height:100%";
+  g.appendChild(d);
+}
+</script>
+</div>
+
+</div></body></html>

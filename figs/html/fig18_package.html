@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:4.0in}</style></head>
+<body data-meta='{"width":6.6,"height":4.0}'>
+<div class="fig" style="grid-template-columns:1.3fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel" style="grid-row:span 2"><div class="ttl"><span class="tag">a</span>Package cross-section</div>
+<svg viewBox="0 0 270 196" style="width:100%;height:86%">
+ <g font-family="Helvetica" font-size="6">
+  <!-- lid -->
+  <path d="M18 40 H252 V52 H18 Z" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+  <text x="135" y="49" text-anchor="middle" font-size="5.6">integrated heat spreader + vapour chamber</text>
+  <!-- TIM -->
+  <rect x="60" y="52" width="150" height="8" fill="#FDF3E6" stroke="#D9822B" stroke-width="0.6"/>
+  <text x="135" y="58" text-anchor="middle" font-size="5.2">TIM (0.6 mm)</text>
+  <!-- L3 dies -->
+  <rect x="78" y="60" width="52" height="12" fill="#DDEBEC" stroke="#0E7C86" stroke-width="0.6"/>
+  <text x="104" y="69" text-anchor="middle" font-size="5.2">L3 die 0 (64 MB)</text>
+  <rect x="140" y="60" width="52" height="12" fill="#DDEBEC" stroke="#0E7C86" stroke-width="0.6"/>
+  <text x="166" y="69" text-anchor="middle" font-size="5.2">L3 die 1 (64 MB)</text>
+  <!-- compute die -->
+  <rect x="60" y="72" width="150" height="26" fill="#EDF1F7" stroke="#10233F" stroke-width="0.7"/>
+  <text x="135" y="88" text-anchor="middle" font-size="6">compute die &middot; 287.6 mm&sup2; &middot; N3G</text>
+  <!-- hybrid bond -->
+  <g stroke="#0E7C86" stroke-width="0.5" stroke-dasharray="1 1">
+    <line x1="78" y1="72" x2="130" y2="72"/><line x1="140" y1="72" x2="192" y2="72"/>
+  </g>
+  <!-- HBM stacks -->
+  <g fill="#FDF3E6" stroke="#D9822B" stroke-width="0.6">
+    <rect x="12" y="60" width="34" height="38"/><rect x="224" y="60" width="34" height="38"/>
+  </g>
+  <g stroke="#D9822B" stroke-width="0.4">
+    <line x1="12" y1="70" x2="46" y2="70"/><line x1="12" y1="80" x2="46" y2="80"/><line x1="12" y1="90" x2="46" y2="90"/>
+    <line x1="224" y1="70" x2="258" y2="70"/><line x1="224" y1="80" x2="258" y2="80"/><line x1="224" y1="90" x2="258" y2="90"/>
+  </g>
+  <text x="29" y="110" text-anchor="middle" font-size="5.2">HBM3E 24 GB</text>
+  <text x="241" y="110" text-anchor="middle" font-size="5.2">HBM3E 24 GB</text>
+  <!-- interposer -->
+  <rect x="8" y="118" width="254" height="10" fill="#F1F4F8" stroke="#94A3B8" stroke-width="0.6"/>
+  <text x="135" y="125" text-anchor="middle" font-size="5.2">2.5D silicon bridge interposer (2.0 reticles)</text>
+  <!-- substrate -->
+  <rect x="8" y="128" width="254" height="26" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.6"/>
+  <text x="135" y="144" text-anchor="middle" font-size="5.4">organic substrate &middot; 12 layers &middot; 2812 BGA balls at 0.8 mm</text>
+  <!-- PCB -->
+  <rect x="8" y="154" width="254" height="10" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+  <text x="135" y="161.5" text-anchor="middle" font-size="5.2">PCB &middot; slot power, 12 V / 5.5 A</text>
+  <!-- dimension arrow -->
+  <g stroke="#64748B" stroke-width="0.4">
+    <line x1="8" y1="176" x2="262" y2="176"/><line x1="8" y1="173" x2="8" y2="179"/>
+    <line x1="262" y1="173" x2="262" y2="179"/>
+  </g>
+  <text x="135" y="185" text-anchor="middle" font-size="5.2">55 mm</text>
+ </g>
+</svg>
+ <div class="sub">Hybrid bonding of the two L3 dies (6 &micro;m pitch) keeps 128 MB within 0.4 pJ/byte of
+   the AVTs; the HBM stacks sit on the same interposer for a 2.4 TB/s state stream.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Top view</div>
+ <div style="position:relative;width:100%;height:78%;border:0.6pt solid #94A3B8;border-radius:2pt;background:#FBFCFE">
+   <div class="box amber" style="position:absolute;left:3%;top:8%;width:19%;height:40%;font-size:5.2pt;text-align:center">HBM 0</div>
+   <div class="box amber" style="position:absolute;left:78%;top:8%;width:19%;height:40%;font-size:5.2pt;text-align:center">HBM 1</div>
+   <div class="box navy" style="position:absolute;left:26%;top:6%;width:48%;height:46%;font-size:5.4pt;text-align:center">
+     compute die<br><span class="sub">18.2 &times; 15.8 mm</span></div>
+   <div class="box teal" style="position:absolute;left:32%;top:56%;width:36%;height:20%;font-size:5.2pt;text-align:center">
+     interposer bridge</div>
+   <div class="sub" style="position:absolute;left:3%;top:80%;width:94%">55 &times; 45 mm &middot;
+     dual-slot &middot; 267 mm card &middot; no auxiliary power connector</div>
+ </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Mechanical / SI budget</div>
+ <table class="t">
+  <tr><th>item</th><th>value</th></tr>
+  <tr><td>package</td><td>55 &times; 45 mm, 2.5D</td></tr>
+  <tr><td>balls / pitch</td><td>2812 / 0.8 mm</td></tr>
+  <tr><td>power delivery</td><td>0.75 V, 80 A, 1.2 m&Omega;</td></tr>
+  <tr><td>PCIe 6.0</td><td>x16, 121 GB/s</td></tr>
+  <tr><td>HBM link</td><td>2 &times; 1024 bit, 9.6 Gbps</td></tr>
+  <tr><td>cooling</td><td>vapour chamber, 2 fans</td></tr>
+ </table>
+</div>
+
+</div></body></html>

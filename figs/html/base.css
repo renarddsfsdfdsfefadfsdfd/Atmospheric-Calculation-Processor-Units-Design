@@ -1,0 +1,37 @@
+@page { margin: 0 }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff;
+  font-family: Helvetica, Arial, sans-serif; color: #1B2430; -webkit-font-smoothing: antialiased; }
+.fig { position: relative; display: grid; gap: 9pt; padding: 10pt 11pt; }
+.panel { position: relative; border: 0.6pt solid #CBD5E1; border-radius: 3pt;
+  padding: 7pt 8pt 6pt; background: #fff; overflow: hidden; }
+.panel.plain { border: none; padding: 0; }
+.ttl { font-size: 8.2pt; font-weight: bold; color: #10233F; margin: 0 0 5pt; letter-spacing: .1pt; }
+.ttl span.tag { color: #0E7C86; margin-right: 4pt; }
+.sub { font-size: 6.2pt; color: #6B7A8C; line-height: 1.25; }
+.box { border: 0.6pt solid #94A3B8; border-radius: 2.5pt; background: #F8FAFC;
+  padding: 4pt 5pt; font-size: 6.8pt; line-height: 1.2; }
+.box.teal { background: #E9F4F5; border-color: #0E7C86; }
+.box.navy { background: #EDF1F7; border-color: #10233F; }
+.box.amber { background: #FDF3E6; border-color: #D9822B; }
+.box.grey { background: #F1F4F8; border-color: #94A3B8; }
+.box b { font-size: 7.2pt; color: #10233F; }
+.mono { font-family: "SF Mono", Menlo, monospace; font-size: 6.2pt; }
+.k { color: #0E7C86; font-weight: bold; }
+.num { font-family: "SF Mono", Menlo, monospace; color: #10233F; }
+.row { display: flex; gap: 5pt; align-items: center; }
+.col { display: flex; flex-direction: column; gap: 5pt; }
+.arrow { color: #64748B; font-size: 9pt; line-height: 1; text-align: center; }
+.arrow.h { font-size: 10pt; }
+.legend { display: flex; gap: 8pt; font-size: 6pt; color: #475569; align-items: center; }
+.sw { width: 8pt; height: 6pt; border-radius: 1pt; display: inline-block; margin-right: 3pt; }
+.bar { height: 7pt; border-radius: 1.5pt; background: #E2E8F0; position: relative; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 1.5pt; background: #0E7C86; }
+.lbl { font-size: 6pt; color: #475569; }
+.grid8 { display: grid; grid-template-columns: repeat(8, 1fr); gap: 1.5pt; }
+.tile { height: 15pt; border-radius: 1pt; }
+table.t { border-collapse: collapse; width: 100%; font-size: 6.2pt; }
+table.t th { text-align: left; font-weight: bold; color: #10233F; border-bottom: 0.6pt solid #94A3B8;
+  padding: 2pt 3pt; font-size: 6pt; }
+table.t td { padding: 1.6pt 3pt; border-bottom: 0.4pt solid #E2E8F0; }
+table.t tr:last-child td { border-bottom: none; }

@@ -1,0 +1,65 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:3.8in}</style></head>
+<body data-meta='{"width":6.6,"height":3.8}'>
+<div class="fig" style="grid-template-columns:1.2fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel" style="grid-row:span 2"><div class="ttl"><span class="tag">a</span>Metal stack</div>
+<svg viewBox="0 0 250 210" style="width:100%;height:78%">
+ <g font-family="Helvetica" font-size="5.4">
+  <!-- backside -->
+  <rect x="10" y="150" width="230" height="26" fill="#FDF3E6" stroke="#D9822B" stroke-width="0.6"/>
+  <text x="125" y="160" text-anchor="middle" font-size="5.6">backside: BM3 / BM2 / BM1 (power)</text>
+  <text x="125" y="170" text-anchor="middle" font-size="5">nTSV 0.4 &micro;m pitch &middot; 1.2 m&Omega;</text>
+  <!-- device -->
+  <rect x="10" y="126" width="230" height="24" fill="#DDEBEC" stroke="#0E7C86" stroke-width="0.7"/>
+  <text x="125" y="141" text-anchor="middle" font-size="5.6">nanosheet GAA layer &middot; 3 sheets, 16 nm</text>
+  <!-- metals -->
+  <g>
+    <rect x="10" y="112" width="230" height="9" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.5"/>
+    <text x="125" y="119" text-anchor="middle" font-size="5">M0 / M1 &middot; 24 nm pitch</text>
+    <rect x="10" y="98" width="230" height="9" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.5"/>
+    <text x="125" y="105" text-anchor="middle" font-size="5">M2&ndash;M4 &middot; 28 nm pitch</text>
+    <rect x="10" y="84" width="230" height="9" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.5"/>
+    <text x="125" y="91" text-anchor="middle" font-size="5">M5&ndash;M8 &middot; 32 nm pitch</text>
+    <rect x="10" y="70" width="230" height="9" fill="#EDF1F7" stroke="#94A3B8" stroke-width="0.5"/>
+    <text x="125" y="77" text-anchor="middle" font-size="5">M9&ndash;M12 &middot; 56 nm pitch (global)</text>
+  </g>
+  <!-- bumps -->
+  <g fill="#94A3B8">
+    <rect x="24" y="56" width="8" height="8"/><rect x="64" y="56" width="8" height="8"/>
+    <rect x="104" y="56" width="8" height="8"/><rect x="144" y="56" width="8" height="8"/>
+    <rect x="184" y="56" width="8" height="8"/><rect x="224" y="56" width="8" height="8"/>
+  </g>
+  <text x="125" y="50" text-anchor="middle" font-size="5.2">micro-bumps &middot; 40 &micro;m pitch</text>
+  <g stroke="#64748B" stroke-width="0.5">
+    <line x1="10" y1="36" x2="10" y2="150"/><line x1="7" y1="36" x2="13" y2="36"/>
+    <line x1="7" y1="150" x2="13" y2="150"/>
+  </g>
+  <text x="18" y="96" font-size="5" transform="rotate(-90 18,96)" text-anchor="middle">BEOL + device</text>
+ </g>
+</svg>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Interconnect RC</div>
+ <table class="t">
+  <tr><th>layer</th><th>pitch</th><th>R</th><th>C</th></tr>
+  <tr><td>M1</td><td>24 nm</td><td>62 &Omega;/&micro;m</td><td>0.21 fF/&micro;m</td></tr>
+  <tr><td>M4</td><td>32 nm</td><td>28 &Omega;/&micro;m</td><td>0.18 fF/&micro;m</td></tr>
+  <tr><td>M8</td><td>40 nm</td><td>9 &Omega;/&micro;m</td><td>0.16 fF/&micro;m</td></tr>
+  <tr><td>M12</td><td>56 nm</td><td>3 &Omega;/&micro;m</td><td>0.14 fF/&micro;m</td></tr>
+  <tr><td>BM1</td><td>0.4 &micro;m</td><td>0.9 &Omega;/&micro;m</td><td>0.09 fF/&micro;m</td></tr>
+ </table>
+ <div class="sub">Halo and NoC links are kept on M9&ndash;M12 with 2&times; width for
+   electromigration margin.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Supply integrity</div>
+ <div class="row" style="font-size:6pt"><span style="width:52pt">front-side</span>
+  <div class="bar" style="flex:1"><i style="width:78%;background:#D9822B"></i></div><span class="num">62 mV</span></div>
+ <div class="row" style="font-size:6pt;margin-top:3pt"><span style="width:52pt">backside</span>
+  <div class="bar" style="flex:1"><i style="width:60%;background:#0E7C86"></i></div><span class="num">48 mV</span></div>
+ <div class="sub" style="margin-top:5pt">23% lower static IR drop at the 80 A peak; the remaining
+   budget covers 14 mV of dynamic droop from the 1.8 GHz di/dt events.</div>
+</div>
+
+</div></body></html>

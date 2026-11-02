@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>body{width:6.6in;height:4.3in}</style></head>
+<body data-meta='{"width":6.6,"height":4.3}'>
+<div class="fig" style="grid-template-columns:1.02fr 1fr;grid-template-rows:1fr 1fr;height:100%">
+
+<div class="panel"><div class="ttl"><span class="tag">a</span>ACPU-1 in the system</div>
+  <div class="col" style="gap:2pt">
+    <div class="box grey" style="width:64%"><b>Host CPU</b><br><span class="sub">PCIe 6.0 root complex</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box teal" style="width:92%"><b>ACPU-1 card</b> &middot; 65 W TDP &middot; dual slot<br>
+      <span class="sub">compute die 287.6 mm&sup2; &middot; 2 &times; 64 MB stacked L3 &middot; 2 &times; 24 GB HBM3E</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box grey" style="width:64%">system DRAM &middot; NVMe &middot; NIC</div>
+    <div class="sub" style="margin-top:2pt">x16 link: 121 GB/s &middot; the 25.8 GB model state is loaded
+      once per forecast, then streamed on-card.</div>
+  </div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">b</span>Compute die &mdash; logical floorplan</div>
+  <div style="position:relative;width:100%;height:88%;border:0.6pt solid #94A3B8;border-radius:2pt;background:#FBFCFE">
+    <div style="position:absolute;left:8%;top:3%;width:84%;height:9%;border:0.6pt solid #D9822B;
+      background:#FDF3E6;border-radius:2pt;font-size:5.8pt;text-align:center;line-height:1.1">SerDes / PCIe 6.0 x16 &middot; CXL</div>
+    <div style="position:absolute;left:8%;top:15%;width:84%;height:56%;display:grid;
+      grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:3pt">
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 0<br><span class="sub">8 AVT</span></div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 1</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 2</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 3</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 4</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 5</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 6</div>
+      <div class="box teal" style="padding:2pt;font-size:5.6pt;text-align:center">EC 7</div>
+    </div>
+    <div style="position:absolute;left:8%;top:74%;width:84%;height:10%;border:0.6pt solid #94A3B8;
+      background:#EDF1F7;border-radius:2pt;font-size:5.8pt;text-align:center;line-height:1.1">L3 / NoC fabric &middot; 8 TB/s L3, 16 TB/s NoC</div>
+    <div style="position:absolute;left:8%;top:87%;width:40%;height:8%;border:0.6pt solid #94A3B8;
+      background:#F1F4F8;border-radius:2pt;font-size:5.6pt;text-align:center;line-height:1.1">HBM PHY 0</div>
+    <div style="position:absolute;left:52%;top:87%;width:40%;height:8%;border:0.6pt solid #94A3B8;
+      background:#F1F4F8;border-radius:2pt;font-size:5.6pt;text-align:center;line-height:1.1">HBM PHY 1</div>
+  </div>
+  <div class="sub">18.2 &times; 15.8 mm &middot; 28.4 G transistors &middot; 8 ensemble clusters</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">c</span>Memory path of one time step</div>
+  <table class="t">
+    <tr><th>level</th><th>size</th><th>bandwidth</th><th>pJ / byte</th></tr>
+    <tr><td>HBM3E</td><td>48 GB</td><td>2.4 TB/s</td><td class="num">16.0</td></tr>
+    <tr><td>L3 (stacked)</td><td>128 MB</td><td>8.0 TB/s</td><td class="num">0.40</td></tr>
+    <tr><td>L2 per cluster</td><td>3 MB</td><td>1.2 TB/s</td><td class="num">0.138</td></tr>
+    <tr><td>AVT SRAM</td><td>256 KB</td><td>550 GB/s</td><td class="num">0.075</td></tr>
+    <tr><td>register file</td><td>32 KB</td><td>&mdash;</td><td class="num">&mdash;</td></tr>
+  </table>
+  <div class="sub" style="margin-top:4pt">Each cell's 24 variables are read from HBM once and written once
+    per step; 51.5 GB per step at 2.4 TB/s = 21.5 ms, overlapped with 29.1 ms of compute.</div>
+</div>
+
+<div class="panel"><div class="ttl"><span class="tag">d</span>Where a time step goes</div>
+  <div class="lbl">time &mdash; 29.1 ms total</div>
+  <div class="bar" style="margin:2pt 0 6pt"><i style="width:74%"></i></div>
+  <div class="row" style="justify-content:space-between;font-size:5.8pt;margin-top:-4pt">
+    <span>compute 21.6 ms</span><span>memory 21.5 ms (overlapped)</span></div>
+  <div class="lbl">energy &mdash; 1.26 J total</div>
+  <div class="bar" style="margin:2pt 0 4pt;display:flex">
+    <i style="width:26%;background:#0E7C86"></i><i style="width:56%;background:#D9822B;left:26%"></i>
+    <i style="width:15%;background:#94A3B8;left:82%"></i></div>
+  <div class="legend"><span><i class="sw" style="background:#0E7C86"></i>compute 26%</span>
+    <span><i class="sw" style="background:#D9822B"></i>HBM 56%</span>
+    <span><i class="sw" style="background:#94A3B8"></i>static 15%</span></div>
+  <div class="sub" style="margin-top:4pt">Arithmetic is 26% of the energy. The design is paid for in
+    bytes, which is why the fabric and the fused pass matter more than peak FLOPs.</div>
+</div>
+
+</div></body></html>
